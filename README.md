@@ -6,6 +6,8 @@
 
 文档索引主入口为 `docs/doc-index.md`，`docs/INDEX.md` 仅保留为迁移说明页。
 
+自 2026-03-31 起，本仓库同时承载整个 workspace 的 Harness Engineering 交付模板，包括前端交付、API 变更、发布检查和回滚运行手册模板。
+
 ## 目录结构
 
 ```text
@@ -15,6 +17,9 @@ docs/
   architecture/    架构设计
   api/             接口文档
   ui/              UI/交互文档
+    admin-delivery/  管理端路由交付文档归档
+    family-delivery/ 家属端页面与交付文档归档
+    nani-delivery/   护工端页面与交付文档归档
   operations/      运维与发布文档
   meeting-notes/   会议纪要
   README.md        文档首页
@@ -56,6 +61,9 @@ npm run docs:preview
 - 方案设计落在 `docs/architecture/`
 - API 协议落在 `docs/api/`
 - 页面与交互说明落在 `docs/ui/`
+- admin 管理端路由交付归档落在 `docs/ui/admin-delivery/`
+- family 家属端设计与页面交付归档落在 `docs/ui/family-delivery/`
+- nani 护工端设计与页面交付归档落在 `docs/ui/nani-delivery/`
 - 发布、部署、巡检、回滚落在 `docs/operations/`
 - 沟通记录落在 `docs/meeting-notes/`
 
@@ -71,3 +79,6 @@ npm run docs:preview
 - API 模板
 - 会议纪要模板
 - 发布检查清单模板
+- 前端交付模板
+- API 变更模板
+- 回滚运行手册模板

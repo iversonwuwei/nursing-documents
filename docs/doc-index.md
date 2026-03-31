@@ -2,6 +2,12 @@
 
 当前站点可从顶部导航进入首页，模板说明见 [模板说明](/templates)。
 
+## Harness 交付模板
+
+- 目录: `templates/`
+- 说明: 存放按 Harness Engineering 范式编写的需求、前端、API、发布与回滚模板
+- 模板入口: [模板说明](/templates)
+
 ## 需求
 
 - 目录: `docs/requirements/`
@@ -141,6 +147,21 @@
 - [物资列表页](/ui/page-supplies-overview)
 - [AI 日志审计页](/ui/page-ai-logs)
 
+### Admin 路由交付归档
+
+- [Admin 路由交付总览](/ui/admin-delivery/)
+- 说明: 统一归档 nursing-admin-v2 的页面级与路由级交付文档，作为跨工程检索和历史记录入口
+
+### Family 交付归档
+
+- [Family 家属端交付总览](/ui/family-delivery/)
+- 说明: 统一归档 nursing-family-app 的工程设计、模板、文件清单与页面级交付文档
+
+### Nani 交付归档
+
+- [Nani 护工端交付总览](/ui/nani-delivery/)
+- 说明: 统一归档 nursing-nani-app 的工程设计、模板、模块清单与页面级交付文档
+
 ### 流程级文档
 
 - [健康监测页交互流程](/ui/flow-health-monitoring)
@@ -178,6 +199,10 @@
 - 目录: `docs/operations/`
 - 说明: 存放部署流程、发布门禁、回滚方案、巡检手册
 - 初始文档: [发布运行手册](/operations/release-runbook)
+
+### 交付治理
+
+- [Workspace 交付治理总览](/operations/workspace-delivery-governance)
 
 ### 历史记录
 
