@@ -158,6 +158,7 @@ export default defineConfig({
         text: '运维',
         items: [
           { text: '发布运行手册', link: '/operations/release-runbook' },
+          { text: 'Backend Provider 与 Observability 配置', link: '/operations/backend-provider-callback-observability-configuration' },
           { text: 'Admin 历史任务日志', link: '/operations/admin-task-log' },
         ],
       },

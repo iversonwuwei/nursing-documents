@@ -32,6 +32,15 @@
 - 说明: 存放系统架构、模块设计、数据流、边界说明
 - 初始文档: [系统概览](/architecture/system-overview)
 
+### Backend 专题
+
+- [三端前端输入分析与后端约束](/architecture/frontend-backend-input-analysis)
+- [SaaS 微服务后端总体架构](/architecture/backend-saas-microservice-architecture)
+- [后端服务设计与边界说明](/architecture/backend-service-domain-design)
+- [后端数据流与核心 Workflow](/architecture/backend-dataflow-workflows)
+- [Backend 技术选型：.NET 还是 Spring Cloud](/architecture/backend-tech-selection-dotnet-vs-spring)
+- [Backend 云原生 Kubernetes 架构](/architecture/backend-cloud-native-kubernetes-architecture)
+
 ## 平台专题
 
 - 目录: `docs/platform/`
@@ -205,6 +214,10 @@
 ### 交付治理
 
 - [Workspace 交付治理总览](/operations/workspace-delivery-governance)
+
+### Backend 运行配置
+
+- [Backend Provider Callback 与 Observability 配置手册](/operations/backend-provider-callback-observability-configuration)
 
 ### 历史记录
 

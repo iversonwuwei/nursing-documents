@@ -10,13 +10,13 @@
 
 - 老人列表页仍承担搜索、筛选、分页和进入详情的主入口职责。
 - 列表现在同时展示静态台账与新建闭环中的对象，并在顶部暴露入住审核入口。
-- 新增老人不再是孤立按钮，而是进入“新建 -> 审核 -> 入住 -> 台账”的统一链路。
+- 新增老人与资料导入不再是孤立按钮，而是统一进入“录入或导入 -> 审核 -> 入住 -> 台账”的治理链路。
 
 ## Data Source
 
 - Route type: client page with local filter state + shared workflow subscription
 - Primary data: static elderlyList plus admission-workflow shared store merged through elderly-registry helper
-- Downstream links: elderly detail pages, elderly new page, and checkin workflow entry
+- Downstream links: elderly detail pages, elderly new page, elderly import page, and checkin workflow entry
 
 ## UI States
 
@@ -27,15 +27,15 @@
 
 ## Health Signals
 
-- Healthy signal: 搜索、护理等级筛选、状态筛选和分页能稳定组合，新建对象能进入入住审核并回流列表。
-- Failure signal: shared store 新建记录未出现在列表、入口跳转错误，或详情映射失效。
+- Healthy signal: 搜索、护理等级筛选、状态筛选和分页能稳定组合，新建与导入对象都能进入入住审核并回流列表。
+- Failure signal: shared store 新建或导入记录未出现在列表、入口跳转错误，或详情映射失效。
 - Verification proxy: lint 通过；行为变更时加 build 与手工列表流回归。
 
 ## Verification
 
 - Minimum gate: npm run lint
 - Stronger gate for behavior changes: npm run lint and npm run build
-- Manual path: 验证新增老人入口、入住审核入口、搜索筛选分页、详情进入和新建对象回流列表
+- Manual path: 验证新增老人入口、资料导入入口、入住审核入口、搜索筛选分页、详情进入和新建或导入对象回流列表
 
 ## Rollback
 

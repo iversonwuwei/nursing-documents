@@ -16,7 +16,7 @@
 
 - Canonical route delivery notes for nursing-admin-v2 now live in this folder.
 - The admin repo keeps only the local delivery template, local route inventory, verification checklist, and a thin DELIVERY_INDEX entry.
-- Route verification automation is still incremental; the current smoke slice covers root redirect, login, equipment and devices status compatibility, AI assistant tracking-context flow, health compatibility plus metric routing, and analytics alias plus report period switching.
+- Route verification automation is still incremental; the current smoke slice covers root redirect, login, equipment and devices status compatibility, AI assistant tracking-context flow, health compatibility plus metric routing, analytics alias plus report period switching, and the governed elderly create or import loops.
 
 ## Cross-cutting Design
 
@@ -140,6 +140,10 @@
 - [Elderly Health New](./ELDERLY_HEALTH_NEW_DELIVERY.md)
 - [Elderly Vitals New](./ELDERLY_VITALS_NEW_DELIVERY.md)
 - [Elderly Visits New](./ELDERLY_VISITS_NEW_DELIVERY.md)
+
+### Batch 17
+
+- [Elderly Import](./ELDERLY_IMPORT_DELIVERY.md)
 
 ## Next Steps
 
