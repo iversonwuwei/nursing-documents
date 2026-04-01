@@ -18,6 +18,10 @@
 - The admin repo keeps only the local delivery template, local route inventory, verification checklist, and a thin DELIVERY_INDEX entry.
 - Route verification automation is still incremental; the current smoke slice covers root redirect, login, equipment and devices status compatibility, AI assistant tracking-context flow, health compatibility plus metric routing, and analytics alias plus report period switching.
 
+## Cross-cutting Design
+
+- [Admin Create Flows Solution](./CREATE_FLOWS_SOLUTION.md)
+
 ## Route Delivery Notes
 
 ### Batch 1
@@ -128,7 +132,16 @@
 - [Incident Detail](./INCIDENT_DETAIL_DELIVERY.md)
 - [Incidents New](./INCIDENTS_NEW_DELIVERY.md)
 
+### Batch 16
+
+- [Staff New](./STAFF_NEW_DELIVERY.md)
+- [Equipment New](./EQUIPMENT_NEW_DELIVERY.md)
+- [Supplies New](./SUPPLIES_NEW_DELIVERY.md)
+- [Elderly Health New](./ELDERLY_HEALTH_NEW_DELIVERY.md)
+- [Elderly Vitals New](./ELDERLY_VITALS_NEW_DELIVERY.md)
+- [Elderly Visits New](./ELDERLY_VISITS_NEW_DELIVERY.md)
+
 ## Next Steps
 
-- Expand automated route verification beyond the current smoke slice, prioritizing activities or incidents create-loop paths and equipment detail or monitor behavior.
+- Expand automated route verification beyond the current smoke slice, prioritizing the new resource and health-service create-loop paths after implementation lands.
 - Keep route-level delivery notes here as the canonical archive, while local validation and execution guidance stays in nursing-admin-v2.
