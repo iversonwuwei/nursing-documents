@@ -9,13 +9,13 @@
 ## User Impact
 
 - 机构详情页承担机构概览、床位管理、员工管理与对象级 AI 组织摘要的合流入口。
-- 当前交付单元先固定说明与验证门禁，不改现有 tab 切换、统计卡和 AI 摘要行为。
+- 详情页现在也能读取新建待启用机构，不再只依赖本地硬编码对象。
 - 保持床位和员工管理仍是只读原型展示，不自动改床位或调整人员配置。
 
 ## Data Source
 
-- Route type: client detail route with local tab state and local organization mocks
-- Primary sources: local organization, bed, and staff mocks plus AI organization helpers
+- Route type: client detail route with local tab state and shared workflow subscription
+- Primary sources: master-data-workflow merged organization、派生床位数据、员工名册和 AI organization helpers
 - Downstream links: AI assistant context links for overview, beds, and staff roster
 
 ## UI States
@@ -27,8 +27,8 @@
 
 ## Health Signals
 
-- Healthy signal: 机构概览、床位管理、员工管理和 AI 组织摘要围绕同一机构上下文保持一致。
-- Failure signal: tab 内容错位、机构对象映射错误，或 AI 摘要越过人工管理边界。
+- Healthy signal: 机构概览、待启用状态、床位管理、员工管理和 AI 组织摘要围绕同一机构上下文保持一致。
+- Failure signal: tab 内容错位、机构对象映射错误，或新建机构详情被回退到错误默认对象。
 - Verification proxy: lint 通过；行为改动时加 build 与机构详情人工回归。
 
 ## Verification

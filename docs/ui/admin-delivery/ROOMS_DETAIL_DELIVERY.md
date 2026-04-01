@@ -9,13 +9,13 @@
 ## User Impact
 
 - 房间详情页承担房间状态、床位占用、设施信息和 AI 房间建议的对象级查看入口。
-- 当前交付单元先固定说明与验证门禁，不改现有房间信息、床位展示和 AI 建议行为。
+- 详情页现在也能读取新建待启用房间，不再只依赖本地硬编码对象。
 - 保持床位安排和照护动作仍由人工决策，不自动完成入住分配。
 
 ## Data Source
 
-- Route type: client detail route with params-based local mock lookup
-- Primary sources: local room detail mock and AI room detail/care helpers
+- Route type: client detail route with params-based merged lookup and shared workflow subscription
+- Primary sources: master-data-workflow merged room detail and AI room detail/care helpers
 - Downstream links: elderly detail links and AI assistant context links
 
 ## UI States
@@ -27,8 +27,8 @@
 
 ## Health Signals
 
-- Healthy signal: 房间概览、床位占用、对象链接和 AI 建议围绕同一房间对象保持一致。
-- Failure signal: 房间对象映射错误、床位占用错位，或 AI 建议越过人工排房边界。
+- Healthy signal: 房间概览、待启用状态、床位占用、对象链接和 AI 建议围绕同一房间对象保持一致。
+- Failure signal: 房间对象映射错误、床位占用错位，或新建房间详情被回退到错误默认对象。
 - Verification proxy: lint 通过；行为改动时加 build 与房间详情人工回归。
 
 ## Verification

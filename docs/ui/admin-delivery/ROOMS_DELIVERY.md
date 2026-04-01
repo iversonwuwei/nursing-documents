@@ -9,14 +9,14 @@
 ## User Impact
 
 - 房间管理页承担搜索房间、查看入住率、判断可入住资源和进入房间详情的主入口。
-- 当前交付单元先固定说明与验证门禁，不改现有房间列表、入住率和 AI 排房摘要行为。
+- 列表现在同时承接新建房间待启用闭环，可在列表页直接完成启用动作。
 - 保持排房仍由人工决策，AI 只提供解释与分配建议。
 
 ## Data Source
 
-- Route type: client page with local search and pagination state
-- Primary sources: local room mocks, organizations data, and AI room helpers
-- Downstream links: room detail and AI assistant context links
+- Route type: client page with local search and pagination state + shared workflow subscription
+- Primary sources: master-data-workflow merged rooms、机构列表和 AI room helpers
+- Downstream links: room new page, room detail and AI assistant context links
 
 ## UI States
 
@@ -27,15 +27,15 @@
 
 ## Health Signals
 
-- Healthy signal: 房间统计、入住率、房间列表和查看详情入口围绕同一房间数据集保持一致。
-- Failure signal: 入住率和房间状态错位，或 AI 摘要越过“建议而非自动排房”的边界。
+- Healthy signal: 房间统计、待启用状态、房间列表和查看详情入口围绕同一房间数据集保持一致。
+- Failure signal: 待启用房间被直接计入可入住、入住率和房间状态错位，或 AI 摘要越过“建议而非自动排房”的边界。
 - Verification proxy: lint 通过；行为改动时加 build 与房间管理人工回归。
 
 ## Verification
 
 - Minimum gate: npm run lint
 - Stronger gate for behavior changes: npm run lint and npm run build
-- Manual path: 验证搜索、空态、入住率、房间详情入口和 AI 链路
+- Manual path: 验证房间新建、待启用提示、启用动作、搜索空态、房间详情入口和 AI 链路
 
 ## Rollback
 

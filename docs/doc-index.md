@@ -164,6 +164,7 @@
 
 ### 流程级文档
 
+- [管理端新建数据闭环流程](/ui/flow-admin-create-data)
 - [健康监测页交互流程](/ui/flow-health-monitoring)
 - [报警中心页交互流程](/ui/flow-alerts-center)
 - [排班管理页交互流程](/ui/flow-staff-schedule)
@@ -185,6 +186,7 @@
 
 ### 实施级文档
 
+- [管理端新建数据闭环实施说明](/ui/implementation-admin-create-data)
 - [Dashboard 首页实施说明](/ui/implementation-dashboard)
 - [长者详情页实施说明](/ui/implementation-elderly-detail)
 - [健康监测页实施说明](/ui/implementation-health-monitoring)

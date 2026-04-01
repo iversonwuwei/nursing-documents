@@ -8,36 +8,36 @@
 
 ## User Impact
 
-- 新增长者页当前承接基础档案、健康信息和紧急联系人录入，并在保存后返回长者列表。
-- 当前交付单元先固定表单入口职责、验证门禁和回滚路径，不修改提交流程或字段结构。
-- 保持新增表单为单页录入流程，不引入分步向导或额外校验逻辑。
+- 新增长者页现在承接“首批可执行主数据 + 评估输入”录入，而不是孤立档案表单。
+- 提交后不再直接返回长者列表，而是进入入住审核页并自动选中新建记录。
+- 页面明确提示当前交付范围：录入、AI 建议、人工确认和入册闭环的第一步。
 
 ## Data Source
 
 - Route type: client form page
-- Primary source: local form state with simulated submit delay
-- Downstream dependency: next/navigation router push to elderly list
+- Primary source: shared admission-workflow form model and校验规则
+- Downstream dependency: addAdmissionApplication 写入 shared store，并跳转 `/elderly/checkin?selected=...`
 
 ## UI States
 
 - Loading state: 提交时通过 loading 按钮反馈保存中。
-- Empty state: 当前依赖表单默认空值和原生 required 校验；后续若接真实入库接口需补字段级空态提示。
-- Error state: 当前保留 form-level error 占位，后续接真实提交失败时应显式展示。
+- Empty state: 当前依赖表单默认空值和统一校验函数；后续接真实接口时需补字段级提示。
+- Error state: 必填项缺失、年龄或 ADL 非法、联系电话不完整、特护申请无风险备注时，显式展示 form-level 错误。
 - Mobile impact: 三段表单卡片和底部操作区需要验证窄屏下的滚动与提交可达性。
 
 ## Health Signals
 
-- Healthy signal: 新增页可完整录入基础资料并稳定提交返回长者列表。
-- Failure signal: 提交无反馈、返回路径错误，或表单分组与字段职责漂移。
+- Healthy signal: 新增页可完整录入最小字段集并稳定跳转到带 `selected` 参数的入住审核页。
+- Failure signal: 提交无反馈、对象 ID 丢失、返回路径错误，或表单与审核页校验口径不一致。
 - Verification proxy: lint 通过；行为改动时加 build 与新增长者流程人工回归。
 
 ## Verification
 
 - Minimum gate: npm run lint
 - Stronger gate for behavior changes: npm run lint and npm run build
-- Manual path: 验证填写必填项后可提交并返回 `/elderly`
+- Manual path: 验证填写必填项后可提交，并跳转到 `/elderly/checkin?selected=...` 且自动定位对象
 
 ## Rollback
 
 - Revert this delivery note and any future elderly new route changes together.
-- If regressions appear, fallback is the current single-page local form submit flow.
+- If regressions appear, fallback is the旧的单页本地表单并直接返回 `/elderly` 的流程。

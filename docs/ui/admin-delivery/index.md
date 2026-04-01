@@ -114,7 +114,21 @@
 
 - [AI Assistant Root](./AI_ASSISTANT_DELIVERY.md)
 
+### Batch 14
+
+- [Organizations New](./ORGANIZATIONS_NEW_DELIVERY.md)
+- [Rooms New](./ROOMS_NEW_DELIVERY.md)
+
+### Batch 15
+
+- [Activities](./ACTIVITIES_DELIVERY.md)
+- [Activities Detail](./ACTIVITIES_DETAIL_DELIVERY.md)
+- [Activities New](./ACTIVITIES_NEW_DELIVERY.md)
+- [Incidents](./INCIDENTS_DELIVERY.md)
+- [Incident Detail](./INCIDENT_DETAIL_DELIVERY.md)
+- [Incidents New](./INCIDENTS_NEW_DELIVERY.md)
+
 ## Next Steps
 
-- Expand automated route verification beyond the current smoke slice, prioritizing elderly workflow create or edit paths and equipment detail or monitor behavior.
+- Expand automated route verification beyond the current smoke slice, prioritizing activities or incidents create-loop paths and equipment detail or monitor behavior.
 - Keep route-level delivery notes here as the canonical archive, while local validation and execution guidance stays in nursing-admin-v2.
