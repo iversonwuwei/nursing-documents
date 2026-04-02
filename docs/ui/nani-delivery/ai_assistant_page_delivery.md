@@ -16,7 +16,7 @@
 
 - Controller: AiAssistantController
 - Mock source: app/data/services/mock_nani_service.dart
-- Upstream context: alerts, health-trend, handover, tasks or root AI tab
+- Upstream context: alerts, health-trend, health-entry high-risk draft, handover, tasks or root AI tab
 
 ## UI States
 
@@ -27,9 +27,9 @@
 
 ## Health Signals
 
-- Healthy signal: 带对象上下文进入时 banner 正确显示来源和对象，建议卡片与边界卡片可见。
-- Failure signal: 上下文丢失、空态缺失或边界卡片不可见。
-- Stable selectors: ai-context-banner, ai-insight-*, ai-trigger-shift-summary, ai-trigger-alerts, ai-trigger-handover, ai-boundary-card, ai-empty-state
+- Healthy signal: 带对象上下文进入时 banner 正确显示来源和对象；如果来自健康录入高风险草稿，还能看到对应风险摘要卡；建议卡片与边界卡片可见。
+- Failure signal: 上下文丢失、健康录入风险摘要缺失、空态缺失或边界卡片不可见。
+- Stable selectors: ai-context-banner, ai-health-context-card, ai-insight-*, ai-trigger-shift-summary, ai-trigger-alerts, ai-trigger-handover, ai-boundary-card, ai-empty-state
 
 ## Verification
 

@@ -145,6 +145,10 @@
 
 - [Elderly Import](./ELDERLY_IMPORT_DELIVERY.md)
 
+### Batch 18
+
+- [Elderly Face](./ELDERLY_FACE_DELIVERY.md)
+
 ## Next Steps
 
 - Expand automated route verification beyond the current smoke slice, prioritizing the new resource and health-service create-loop paths after implementation lands.
