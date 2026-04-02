@@ -9,6 +9,7 @@
 ## User Impact
 
 - 交接摘要、交接项详情入口和保存草稿动作现在具备稳定锚点，方便覆盖责任链路回归。
+- 当从护理执行页进入时，页面会在顶部展示“来自护理执行的交接草稿”上下文卡，把本次留证与执行备注带入交接班。
 - 当本班没有待交接项时，会显示明确空态，不再只剩空白区域。
 - 保持现有 mock 交接数据和“保存草稿”行为不变。
 
@@ -17,25 +18,26 @@
 - Controller: HandoverController
 - Mock source: app/data/services/mock_nani_service.dart
 - Navigation target: handoff detail route
+- Additional upstream source: care execution follow-up draft
 
 ## UI States
 
 - Loading state: 当前为本地 mock，同步渲染。
 - Empty state: 当前没有待交接项。
-- Error state: 当前无远程提交链路，主要验证详情入口与保存提示是否稳定。
+- Error state: 当前无远程提交链路，主要验证详情入口、护理执行上下文卡与保存提示是否稳定。
 - Mobile impact: 交接卡片和保存草稿按钮具备稳定键，便于小屏回归。
 
 ## Health Signals
 
-- Healthy signal: 可从交接列表进入交接详情，并能保存草稿提示人工确认边界。
-- Failure signal: 交接详情入口失效、空态缺失或草稿按钮不可达。
-- Stable selectors: handover-summary-card, handover-card-*, handover-open-detail-*, handover-save-draft, handover-empty-state
+- Healthy signal: 可从交接列表进入交接详情，并能在护理执行带入草稿时看到上下文卡与保存草稿提示人工确认边界。
+- Failure signal: 交接详情入口失效、护理执行上下文丢失、空态缺失或草稿按钮不可达。
+- Stable selectors: handover-care-execution-banner, handover-summary-card, handover-card-*, handover-open-detail-*, handover-save-draft, handover-empty-state
 
 ## Verification
 
 - flutter analyze
 - flutter test
-- Widget test covers handover entry chain, draft save prompt, and empty state.
+- Widget test covers handover entry chain, care execution context banner, draft save prompt, and empty state.
 
 ## Rollback
 
