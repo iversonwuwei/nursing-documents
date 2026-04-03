@@ -21,6 +21,7 @@
 ## Cross-cutting Design
 
 - [Admin Create Flows Solution](./CREATE_FLOWS_SOLUTION.md)
+- [LTCI Admin Product Solution](./LTCI_ADMIN_PRODUCT_SOLUTION.md)
 
 ## Route Delivery Notes
 
@@ -149,7 +150,15 @@
 
 - [Elderly Face](./ELDERLY_FACE_DELIVERY.md)
 
+### Batch 19
+
+- [Partner, Package, and Plan Workflows](./PARTNER_SERVICE_WORKFLOWS_DELIVERY.md)
+
+### Batch 20
+
+- [Admin 护理工作流真实化竖切架构说明](/architecture/backend-admin-care-workflow-realization)
+
 ## Next Steps
 
-- Expand automated route verification beyond the current smoke slice, prioritizing the new resource and health-service create-loop paths after implementation lands.
+- Expand automated route verification beyond the current smoke slice, prioritizing the new partner, package, and plan workflow paths after implementation lands.
 - Keep route-level delivery notes here as the canonical archive, while local validation and execution guidance stays in nursing-admin-v2.

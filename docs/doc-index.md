@@ -38,6 +38,7 @@
 - [SaaS 微服务后端总体架构](/architecture/backend-saas-microservice-architecture)
 - [后端服务设计与边界说明](/architecture/backend-service-domain-design)
 - [后端数据流与核心 Workflow](/architecture/backend-dataflow-workflows)
+- [Admin 护理工作流真实化竖切](/architecture/backend-admin-care-workflow-realization)
 - [Backend 技术选型：.NET 还是 Spring Cloud](/architecture/backend-tech-selection-dotnet-vs-spring)
 - [Backend 云原生 Kubernetes 架构](/architecture/backend-cloud-native-kubernetes-architecture)
 

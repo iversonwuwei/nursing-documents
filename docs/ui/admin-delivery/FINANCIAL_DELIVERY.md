@@ -2,42 +2,46 @@
 
 ## Scope
 
-- Entry route: src/app/financial/page.tsx
-- Affected users: 财务负责人、运营管理、院长与经营分析协同用户
-- Rollout stage: 第五批高频运营路由治理说明
+- Entry route: `src/app/financial/page.tsx`
+- Affected users: 财务结算人员、评估主管、质控复核人员
+- Rollout stage: 评定机构模型纠偏后的结算与质控页升级
 
 ## User Impact
 
-- 财务收支页承担月度收支总览、利润结构和 AI 经营解读的统一入口。
-- 当前交付单元先固定说明与验证门禁，不改现有 KPI、构成图和 AI 经营解读行为。
-- 保持 AI 输出仍是经营解释与建议，不替代正式记账、预算审批或财务结论。
+- 财务页不再展示护理服务结算，而是承接评定服务结算与质控工作台。
+- 页面围绕评定案件、资料完整性、人工调整、质控风险和评估费结算进度组织信息。
+- 页面可见个案对应的规则集和模板上下文，避免结算与认定脱节。
 
 ## Data Source
 
-- Route type: client page with local monthly aggregates and breakdown data
-- Primary sources: local monthly, category, and expense mocks plus AI financial helpers
-- Downstream links: AI assistant context links for inference and logs
+- Primary source: `assessment-workflow` 共享个案 store 派生出的结算单
+- Supporting source: `assessment-config-workflow` 提供规则集和模板上下文
+- Contract note: 待认定确认的个案不会提前进入结算视图
 
 ## UI States
 
-- Loading state: 当前为本地同步 mock；后续接财务接口时需补月度汇总与图表反馈。
-- Empty state: 当前静态样本非空；若未来月度数据为空，需保持局部空态而不是整页失真。
-- Error state: KPI、收入支出构成与 AI 解读口径不一致时需局部暴露。
-- Mobile impact: KPI 卡、双列分析卡与构成图较多，后续改动需验证窄屏堆叠顺序和按钮可达性。
+- Loading state: 当前为本地 mock，后续接真实结算接口时补批次加载与提交反馈。
+- Empty state: 若没有已进入结算阶段的案件，页面需提示先完成个案认定。
+- Error state: 资料缺失、人工调整无依据、规则或模板缺失时，应在页面上可见。
+- Mobile impact: KPI、结算单列表和明细需验证窄屏堆叠和点击可达性。
 
 ## Health Signals
 
-- Healthy signal: KPI、收入支出构成和 AI 解读围绕同一月度财务样本保持一致。
-- Failure signal: 月度口径与构成图错位，或 AI 建议越过“需财务确认”的边界。
-- Verification proxy: lint 通过；行为改动时加 build 与财务页人工回归。
+- Healthy signal: 结算页只展示已进入认定闭环的案件。
+- Healthy signal: 结算页可见规则版本、模板和资料完整性状态。
+- Failure signal: 仍以“服务计划”“医保申报”“基金承担”为页面主话术，或结算单无法关联认定上下文。
 
 ## Verification
 
-- Minimum gate: npm run lint
-- Stronger gate for behavior changes: npm run lint and npm run build
-- Manual path: 验证 KPI、收入支出构成、AI 经营解读和 AI 链路
+- Minimum gate: `npm run lint`
+- Stronger gate: `npm run lint && npm run build`
+- Documentation gate: `npm run docs:build`
+- Manual path:
+  - 进入 `/financial`
+  - 确认标题、KPI 和列表语义已经切到评定服务结算
+  - 选中一条结算单后可见规则集或模板信息
 
 ## Rollback
 
-- Revert this delivery note and any future financial route changes together.
-- If regressions appear, fallback is the previous local finance dashboard composition and AI wording.
+- Revert this note together with `financial/page.tsx` changes.
+- If regressions appear, fallback is the previous demo finance wording, but会恢复与评定机构模型不一致的表达。
