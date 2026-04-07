@@ -19,8 +19,8 @@
 
 - Controller: CareExecutionController
 - Mock source: app/data/services/mock_nani_service.dart
-- 关联模型: CareTask, CareEvidenceRequirement
-- Upstream targets: tasks page, residents page, resident detail page
+- 关联模型: CareTask, CareEvidenceRequirement, CareClockInDraft
+- Upstream targets: care check-in page, tasks page, residents page, resident detail page
 - 当前阶段为本地 mock 交互；后续真实接口需要沿用相同的留证槽位、执行摘要对象和下游联动结构接入上传 API 与 workflow API。
 
 ## UI States

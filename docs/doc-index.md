@@ -16,9 +16,11 @@
 
 ### 核心模块
 
+- [Admin 顶部导航响应式改造](/requirements/admin-navbar-responsive)
 - [长者管理](/requirements/elderly-management)
 - [健康监测](/requirements/health-monitoring)
 - [报警与事件](/requirements/alerts-incidents)
+- [Nani 打卡与打卡管理](/requirements/nani-clockin-workflow)
 - [员工协同](/requirements/staff-collaboration)
 - [机构管理](/requirements/organization-management)
 - [房间与床位](/requirements/room-management)
@@ -34,10 +36,12 @@
 
 ### Backend 专题
 
+- [Admin 顶部导航响应式设计](/architecture/admin-navbar-responsive)
 - [三端前端输入分析与后端约束](/architecture/frontend-backend-input-analysis)
 - [SaaS 微服务后端总体架构](/architecture/backend-saas-microservice-architecture)
 - [后端服务设计与边界说明](/architecture/backend-service-domain-design)
 - [后端数据流与核心 Workflow](/architecture/backend-dataflow-workflows)
+- [Admin 与 Nani 打卡工作流](/architecture/admin-nani-clockin-workflow)
 - [Admin 护理工作流真实化竖切](/architecture/backend-admin-care-workflow-realization)
 - [Backend 技术选型：.NET 还是 Spring Cloud](/architecture/backend-tech-selection-dotnet-vs-spring)
 - [Backend 云原生 Kubernetes 架构](/architecture/backend-cloud-native-kubernetes-architecture)

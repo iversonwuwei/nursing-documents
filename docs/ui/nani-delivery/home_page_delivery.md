@@ -16,7 +16,7 @@
 
 - Controller: HomeController
 - Mock source: app/data/services/mock_nani_service.dart
-- Navigation targets: notifications, residents, health, handover, schedule, careExecution
+- Navigation targets: notifications, residents, health, handover, schedule, careCheckin, careExecution
 
 ## UI States
 
@@ -29,7 +29,7 @@
 
 - Healthy signal: 登录后可从首页进入消息中心、快捷动作目标页，并通过底部导航切换主标签。
 - Failure signal: 关键入口无法命中目标页或 IndexedStack 标签切换失效。
-- Stable selectors: home-open-notifications, home-quick-action-residents, home-quick-action-health, home-quick-action-handover, home-quick-action-schedule, root-nav-home, root-nav-tasks, root-nav-alerts
+- Stable selectors: home-open-notifications, home-quick-action-residents, home-quick-action-health, home-quick-action-handover, home-quick-action-care-checkin, home-quick-action-schedule, root-nav-home, root-nav-tasks, root-nav-alerts
 
 ## Verification
 

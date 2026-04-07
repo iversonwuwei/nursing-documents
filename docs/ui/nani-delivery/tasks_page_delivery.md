@@ -16,7 +16,7 @@
 
 - Controller: TasksController
 - Mock source: app/data/services/mock_nani_service.dart
-- Navigation targets: healthEntry, careExecution, residentDetail
+- Navigation targets: healthEntry, careCheckin, careExecution, residentDetail
 
 ## UI States
 

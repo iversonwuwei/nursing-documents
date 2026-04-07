@@ -158,6 +158,10 @@
 
 - [Admin 护理工作流真实化竖切架构说明](/architecture/backend-admin-care-workflow-realization)
 
+### Batch 21
+
+- [Nursing Check-in](./NURSING_CHECKIN_DELIVERY.md)
+
 ## Next Steps
 
 - Expand automated route verification beyond the current smoke slice, prioritizing the new partner, package, and plan workflow paths after implementation lands.
