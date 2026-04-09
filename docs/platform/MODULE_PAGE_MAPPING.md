@@ -189,6 +189,9 @@
 | `/ai-assistant/staff-app` | 员工 APP + AI 预览 | AI 能力 / 员工 APP 原型 | AI Service / Care Service / Alert Service | 待实现 |
 | `/ai-assistant/family-app` | 家属 APP + AI 预览 | AI 能力 / 家属 APP 原型 | AI Service / Elder Service / Visit Service | 待实现 |
 | `/settings` | 系统配置 | 系统设置 | Config Service | 标准骨架页 |
+| `/settings/static-texts` | 静态文本管理 | 系统设置 / 内容治理 | Config Service | 已实现 |
+| `/settings/option-groups` | 下拉选项管理 | 系统设置 / 内容治理 | Config Service | 已实现 |
+| `/settings/audit-logs` | 内容操作日志 | 系统设置 / 内容治理 | Config Service | 已实现 |
 | `/settings/roles` | 角色权限 | 系统设置 | User Service / Config Service | 标准骨架页 |
 | `/login` | 登录页 | 认证 | User Service | 已实现 |
 

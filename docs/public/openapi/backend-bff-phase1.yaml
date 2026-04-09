@@ -1,0 +1,2127 @@
+openapi: 3.1.0
+info:
+  title: Nursing Backend BFF API
+  version: 0.1.0-phase1
+  summary: Phase 1 BFF contract for content management, nursing workflow, and AI surfaces.
+  description: |
+    This specification captures the currently real backend-facing API surface audited from the admin frontend.
+    It is intentionally scoped to phase 1 BFF contracts instead of every future domain endpoint.
+servers:
+  - url: https://api.example.com
+    description: Gateway ingress example
+tags:
+  - name: ContentManagement
+  - name: NursingWorkflow
+  - name: AdminAI
+  - name: NaniAI
+  - name: FamilyAI
+paths:
+  /api/admin/static-texts:
+    get:
+      tags: [ContentManagement]
+      summary: Query static texts
+      operationId: listStaticTexts
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: ns
+          schema:
+            type: string
+        - in: query
+          name: locale
+          schema:
+            type: string
+        - in: query
+          name: keyword
+          schema:
+            type: string
+        - in: query
+          name: page
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - in: query
+          name: pageSize
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+      responses:
+        '200':
+          description: Static text list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StaticTextListResponse'
+        default:
+          $ref: '#/components/responses/Problem'
+    post:
+      tags: [ContentManagement]
+      summary: Create a static text
+      operationId: createStaticText
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StaticTextCreateRequest'
+      responses:
+        '200':
+          description: Static text created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StaticTextResponse'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/admin/static-texts/{id}:
+    get:
+      tags: [ContentManagement]
+      summary: Get static text detail
+      operationId: getStaticText
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/Id'
+      responses:
+        '200':
+          description: Static text detail
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StaticTextResponse'
+        default:
+          $ref: '#/components/responses/Problem'
+    put:
+      tags: [ContentManagement]
+      summary: Update static text
+      operationId: updateStaticText
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/Id'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StaticTextUpdateRequest'
+      responses:
+        '200':
+          description: Static text updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StaticTextResponse'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/admin/static-texts/namespaces:
+    get:
+      tags: [ContentManagement]
+      summary: List static text namespaces
+      operationId: listStaticTextNamespaces
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Namespace list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/admin/option-groups:
+    get:
+      tags: [ContentManagement]
+      summary: Query option groups
+      operationId: listOptionGroups
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: status
+          schema:
+            type: string
+        - in: query
+          name: keyword
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Option group list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OptionGroupListResponse'
+        default:
+          $ref: '#/components/responses/Problem'
+    post:
+      tags: [ContentManagement]
+      summary: Create option group
+      operationId: createOptionGroup
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OptionGroupCreateRequest'
+      responses:
+        '200':
+          description: Option group created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OptionGroupResponse'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/admin/option-groups/{id}:
+    put:
+      tags: [ContentManagement]
+      summary: Update option group
+      operationId: updateOptionGroup
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/Id'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OptionGroupUpdateRequest'
+      responses:
+        '200':
+          description: Option group updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OptionGroupResponse'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/admin/option-groups/{groupId}/items:
+    get:
+      tags: [ContentManagement]
+      summary: Query option items in a group
+      operationId: listOptionItems
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/GroupId'
+      responses:
+        '200':
+          description: Option item list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OptionItemResponse'
+        default:
+          $ref: '#/components/responses/Problem'
+    post:
+      tags: [ContentManagement]
+      summary: Create option item
+      operationId: createOptionItem
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/GroupId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OptionItemCreateRequest'
+      responses:
+        '200':
+          description: Option item created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OptionItemResponse'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/admin/option-groups/{groupId}/items/{itemId}:
+    put:
+      tags: [ContentManagement]
+      summary: Update option item
+      operationId: updateOptionItem
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/GroupId'
+        - $ref: '#/components/parameters/ItemId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OptionItemUpdateRequest'
+      responses:
+        '200':
+          description: Option item updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OptionItemResponse'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/admin/option-groups/{groupId}/items/{itemId}/toggle:
+    patch:
+      tags: [ContentManagement]
+      summary: Toggle option item status
+      operationId: toggleOptionItem
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/GroupId'
+        - $ref: '#/components/parameters/ItemId'
+      responses:
+        '200':
+          description: Option item toggled
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OptionItemResponse'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/admin/option-groups/{groupId}/items/reorder:
+    put:
+      tags: [ContentManagement]
+      summary: Reorder option items
+      operationId: reorderOptionItems
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/GroupId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OptionItemReorderRequest'
+      responses:
+        '200':
+          description: Reordered items
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OptionItemResponse'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/admin/audit-logs:
+    get:
+      tags: [ContentManagement]
+      summary: Query content audit logs
+      operationId: listContentAuditLogs
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: resourceType
+          schema:
+            type: string
+        - in: query
+          name: operatorId
+          schema:
+            type: string
+        - in: query
+          name: page
+          schema:
+            type: integer
+            default: 1
+        - in: query
+          name: pageSize
+          schema:
+            type: integer
+            default: 20
+      responses:
+        '200':
+          description: Content audit log list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContentAuditLogListResponse'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/admin/audit-logs/{resourceType}/{resourceId}:
+    get:
+      tags: [ContentManagement]
+      summary: Query audit logs by resource
+      operationId: listAuditLogsByResource
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: resourceType
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: resourceId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Content audit log list for a resource
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContentAuditLogListResponse'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/admin/nursing/workflow-board:
+    get:
+      tags: [NursingWorkflow]
+      summary: Query nursing workflow board
+      operationId: getNursingWorkflowBoard
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Workflow board
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NursingWorkflowBoardResponse'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/admin/nursing/observability:
+    get:
+      tags: [NursingWorkflow]
+      summary: Query nursing workflow observability summary
+      operationId: getNursingWorkflowObservability
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Workflow observability
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CareWorkflowObservabilityResponse'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/admin/nursing/audits:
+    get:
+      tags: [NursingWorkflow]
+      summary: Query nursing workflow audits
+      operationId: listNursingWorkflowAudits
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: take
+          schema:
+            type: integer
+            default: 20
+      responses:
+        '200':
+          description: Workflow audit list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CareWorkflowAuditResponse'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/admin/nursing/packages:
+    post:
+      tags: [NursingWorkflow]
+      summary: Create nursing service package
+      operationId: createServicePackage
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateServicePackageRequest'
+      responses:
+        '200':
+          description: Service package created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServicePackageResponse'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/admin/nursing/packages/{packageId}/actions/{action}:
+    post:
+      tags: [NursingWorkflow]
+      summary: Submit service package action
+      operationId: actOnServicePackage
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: packageId
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: action
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Service package action result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServicePackageActionResponse'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/admin/nursing/packages/{packageId}/plans:
+    post:
+      tags: [NursingWorkflow]
+      summary: Generate service plan from package
+      operationId: createPlanFromPackage
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: packageId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Generated service plan
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServicePlanResponse'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/admin/nursing/plans:
+    post:
+      tags: [NursingWorkflow]
+      summary: Create service plan
+      operationId: createServicePlan
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateServicePlanRequest'
+      responses:
+        '200':
+          description: Service plan created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServicePlanResponse'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/admin/nursing/plans/{planId}/actions/{action}:
+    post:
+      tags: [NursingWorkflow]
+      summary: Submit service plan action
+      operationId: actOnServicePlan
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: planId
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: action
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Service plan action result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServicePlanActionResponse'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/admin/nursing/tasks/{taskId}/start:
+    post:
+      tags: [NursingWorkflow]
+      summary: Start service plan task
+      operationId: startServicePlanTask
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: taskId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ServicePlanTaskActionRequest'
+      responses:
+        '200':
+          description: Task action result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServicePlanActionResponse'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/admin/nursing/tasks/{taskId}/complete:
+    post:
+      tags: [NursingWorkflow]
+      summary: Complete service plan task
+      operationId: completeServicePlanTask
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: taskId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ServicePlanTaskActionRequest'
+      responses:
+        '200':
+          description: Task action result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServicePlanActionResponse'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/admin/nursing/tasks/{taskId}/note:
+    put:
+      tags: [NursingWorkflow]
+      summary: Save service plan task note
+      operationId: saveServicePlanTaskNote
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: taskId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SaveServicePlanTaskNoteRequest'
+      responses:
+        '200':
+          description: Task note result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServicePlanActionResponse'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/admin/ai/dashboard-insights:
+    post:
+      tags: [AdminAI]
+      summary: Generate dashboard insights
+      operationId: generateDashboardInsights
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AiDashboardInsightsRequest'
+      responses:
+        '200':
+          description: Dashboard insights envelope
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AiDashboardInsightsEnvelope'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/admin/ai/health-risk:
+    post:
+      tags: [AdminAI]
+      summary: Generate health risk explanation
+      operationId: generateHealthRisk
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AiHealthRiskRequest'
+      responses:
+        '200':
+          description: Health risk envelope
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AiHealthRiskEnvelope'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/admin/ai/task-priority:
+    post:
+      tags: [AdminAI]
+      summary: Rank task priorities
+      operationId: rankTaskPriority
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AiTaskPriorityRequest'
+      responses:
+        '200':
+          description: Task priority envelope
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AiTaskPriorityEnvelope'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/admin/ai/chat:
+    post:
+      tags: [AdminAI]
+      summary: Admin AI chat
+      operationId: adminAiChat
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AiChatRequest'
+      responses:
+        '200':
+          description: AI chat envelope
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AiChatEnvelope'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/admin/ai/rules:
+    get:
+      tags: [AdminAI]
+      summary: List AI rules
+      operationId: listAiRules
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: AI rule list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AiRuleResponse'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/admin/ai/rules/{ruleId}/toggle:
+    patch:
+      tags: [AdminAI]
+      summary: Toggle AI rule
+      operationId: toggleAiRule
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: ruleId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AiRuleToggleRequest'
+      responses:
+        '200':
+          description: Toggled AI rule
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AiRuleResponse'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/admin/ai/models/status:
+    get:
+      tags: [AdminAI]
+      summary: List AI model statuses
+      operationId: listAiModelStatuses
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Model status list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AiModelStatusResponse'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/admin/ai/audit-logs:
+    get:
+      tags: [AdminAI]
+      summary: Query AI audit logs
+      operationId: listAiAuditLogs
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: capability
+          schema:
+            type: string
+        - in: query
+          name: page
+          schema:
+            type: integer
+            default: 1
+        - in: query
+          name: pageSize
+          schema:
+            type: integer
+            default: 20
+      responses:
+        '200':
+          description: AI audit log list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AiAuditLogListResponse'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/nani/ai/shift-summary:
+    post:
+      tags: [NaniAI]
+      summary: Generate staff shift summary
+      operationId: generateShiftSummary
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AiShiftSummaryRequest'
+      responses:
+        '200':
+          description: Shift summary envelope
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AiShiftSummaryEnvelope'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/nani/ai/handover-draft:
+    post:
+      tags: [NaniAI]
+      summary: Generate handover draft
+      operationId: generateHandoverDraft
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AiHandoverDraftRequest'
+      responses:
+        '200':
+          description: Handover draft envelope
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AiHandoverDraftEnvelope'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/nani/ai/escalation-draft:
+    post:
+      tags: [NaniAI]
+      summary: Generate escalation draft
+      operationId: generateEscalationDraft
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AiEscalationDraftRequest'
+      responses:
+        '200':
+          description: Escalation draft envelope
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AiEscalationDraftEnvelope'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/family/ai/today-summary:
+    post:
+      tags: [FamilyAI]
+      summary: Generate family today summary
+      operationId: generateFamilyTodaySummary
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AiFamilyTodaySummaryRequest'
+      responses:
+        '200':
+          description: Family today summary envelope
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AiFamilyTodaySummaryEnvelope'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/family/ai/health-explain:
+    post:
+      tags: [FamilyAI]
+      summary: Generate family-friendly health explanation
+      operationId: generateFamilyHealthExplain
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AiHealthExplainRequest'
+      responses:
+        '200':
+          description: Family health explain envelope
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AiHealthExplainEnvelope'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/family/ai/visit-assistant:
+    post:
+      tags: [FamilyAI]
+      summary: Generate visit assistant suggestions
+      operationId: generateVisitAssistant
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AiVisitAssistantRequest'
+      responses:
+        '200':
+          description: Visit assistant envelope
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AiVisitAssistantEnvelope'
+        default:
+          $ref: '#/components/responses/Problem'
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  parameters:
+    Id:
+      in: path
+      name: id
+      required: true
+      schema:
+        type: string
+    GroupId:
+      in: path
+      name: groupId
+      required: true
+      schema:
+        type: string
+    ItemId:
+      in: path
+      name: itemId
+      required: true
+      schema:
+        type: string
+  responses:
+    Problem:
+      description: Error response
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+  schemas:
+    ProblemDetails:
+      type: object
+      properties:
+        type:
+          type: string
+        title:
+          type: string
+        status:
+          type: integer
+        detail:
+          type: string
+        traceId:
+          type: string
+    StaticTextCreateRequest:
+      type: object
+      required: [namespace, textKey, locale, textValue]
+      properties:
+        namespace:
+          type: string
+        textKey:
+          type: string
+        locale:
+          type: string
+        textValue:
+          type: string
+        description:
+          type: string
+          nullable: true
+    StaticTextUpdateRequest:
+      type: object
+      required: [textValue, version]
+      properties:
+        textValue:
+          type: string
+        description:
+          type: string
+          nullable: true
+        version:
+          type: integer
+    StaticTextResponse:
+      type: object
+      required: [id, tenantId, namespace, textKey, locale, textValue, version, createdAtUtc, updatedAtUtc]
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        namespace:
+          type: string
+        textKey:
+          type: string
+        locale:
+          type: string
+        textValue:
+          type: string
+        description:
+          type: string
+          nullable: true
+        version:
+          type: integer
+        updatedBy:
+          type: string
+          nullable: true
+        createdAtUtc:
+          type: string
+          format: date-time
+        updatedAtUtc:
+          type: string
+          format: date-time
+    StaticTextListResponse:
+      type: object
+      required: [items, total, page, pageSize]
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/StaticTextResponse'
+        total:
+          type: integer
+        page:
+          type: integer
+        pageSize:
+          type: integer
+    OptionGroupCreateRequest:
+      type: object
+      required: [groupCode, groupName]
+      properties:
+        groupCode:
+          type: string
+        groupName:
+          type: string
+        description:
+          type: string
+          nullable: true
+    OptionGroupUpdateRequest:
+      type: object
+      required: [groupName]
+      properties:
+        groupName:
+          type: string
+        description:
+          type: string
+          nullable: true
+    OptionGroupResponse:
+      type: object
+      required: [id, tenantId, groupCode, groupName, isSystem, status, itemCount, updatedAtUtc]
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        groupCode:
+          type: string
+        groupName:
+          type: string
+        description:
+          type: string
+          nullable: true
+        isSystem:
+          type: boolean
+        status:
+          type: string
+        itemCount:
+          type: integer
+        updatedAtUtc:
+          type: string
+          format: date-time
+    OptionGroupListResponse:
+      type: object
+      required: [items]
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/OptionGroupResponse'
+    OptionItemCreateRequest:
+      type: object
+      required: [optionCode, labelZh, sortOrder, isDefault]
+      properties:
+        optionCode:
+          type: string
+        labelZh:
+          type: string
+        labelEn:
+          type: string
+          nullable: true
+        sortOrder:
+          type: integer
+        isDefault:
+          type: boolean
+    OptionItemUpdateRequest:
+      type: object
+      required: [labelZh, sortOrder, isDefault]
+      properties:
+        labelZh:
+          type: string
+        labelEn:
+          type: string
+          nullable: true
+        sortOrder:
+          type: integer
+        isDefault:
+          type: boolean
+    OptionItemResponse:
+      type: object
+      required: [id, groupId, optionCode, labelZh, sortOrder, isActive, isDefault, updatedAtUtc]
+      properties:
+        id:
+          type: string
+        groupId:
+          type: string
+        optionCode:
+          type: string
+        labelZh:
+          type: string
+        labelEn:
+          type: string
+          nullable: true
+        sortOrder:
+          type: integer
+        isActive:
+          type: boolean
+        isDefault:
+          type: boolean
+        updatedAtUtc:
+          type: string
+          format: date-time
+    OptionItemOrderEntry:
+      type: object
+      required: [itemId, sortOrder]
+      properties:
+        itemId:
+          type: string
+        sortOrder:
+          type: integer
+    OptionItemReorderRequest:
+      type: object
+      required: [ordering]
+      properties:
+        ordering:
+          type: array
+          items:
+            $ref: '#/components/schemas/OptionItemOrderEntry'
+    ContentAuditLogResponse:
+      type: object
+      required: [id, tenantId, operatorId, operatorName, resourceType, resourceId, action, createdAtUtc]
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        operatorId:
+          type: string
+        operatorName:
+          type: string
+        resourceType:
+          type: string
+        resourceId:
+          type: string
+        action:
+          type: string
+        beforeSnapshot:
+          type: string
+          nullable: true
+        afterSnapshot:
+          type: string
+          nullable: true
+        createdAtUtc:
+          type: string
+          format: date-time
+    ContentAuditLogListResponse:
+      type: object
+      required: [items, total, page, pageSize]
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ContentAuditLogResponse'
+        total:
+          type: integer
+        page:
+          type: integer
+        pageSize:
+          type: integer
+    CreateServicePackageRequest:
+      type: object
+      required: [name, careLevel, targetGroup, monthlyPrice, settlementCycle, serviceScope, addOns]
+      properties:
+        name:
+          type: string
+        careLevel:
+          type: string
+        targetGroup:
+          type: string
+        monthlyPrice:
+          type: string
+        settlementCycle:
+          type: string
+        serviceScope:
+          type: array
+          items:
+            type: string
+        addOns:
+          type: array
+          items:
+            type: string
+    ServicePackageResponse:
+      type: object
+      required: [id, name, careLevel, targetGroup, monthlyPrice, settlementCycle, serviceScope, addOns, boundElders, status, createdAt]
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        careLevel:
+          type: string
+        targetGroup:
+          type: string
+        monthlyPrice:
+          type: string
+        settlementCycle:
+          type: string
+        serviceScope:
+          type: array
+          items:
+            type: string
+        addOns:
+          type: array
+          items:
+            type: string
+        boundElders:
+          type: integer
+        status:
+          type: string
+        createdAt:
+          type: string
+        publishedAt:
+          type: string
+          nullable: true
+        pricingNote:
+          type: string
+          nullable: true
+    ServicePackageActionResponse:
+      type: object
+      required: [packageId, status, message]
+      properties:
+        packageId:
+          type: string
+        status:
+          type: string
+        message:
+          type: string
+    CreateServicePlanRequest:
+      type: object
+      required: [packageId, elderlyName, room, focus, shift, ownerRole, ownerName, riskTags, source]
+      properties:
+        packageId:
+          type: string
+        elderlyName:
+          type: string
+        room:
+          type: string
+        focus:
+          type: string
+        shift:
+          type: string
+        ownerRole:
+          type: string
+        ownerName:
+          type: string
+        riskTags:
+          type: array
+          items:
+            type: string
+        source:
+          type: string
+    ServicePlanResponse:
+      type: object
+      required: [id, elderlyName, room, packageId, packageName, careLevel, focus, shift, ownerRole, ownerName, riskTags, source, status, createdAt]
+      properties:
+        id:
+          type: string
+        elderlyName:
+          type: string
+        room:
+          type: string
+        packageId:
+          type: string
+        packageName:
+          type: string
+        careLevel:
+          type: string
+        focus:
+          type: string
+        shift:
+          type: string
+        ownerRole:
+          type: string
+        ownerName:
+          type: string
+        riskTags:
+          type: array
+          items:
+            type: string
+        source:
+          type: string
+        status:
+          type: string
+        createdAt:
+          type: string
+        reviewNote:
+          type: string
+          nullable: true
+    ServicePlanActionResponse:
+      type: object
+      required: [planId, status, message]
+      properties:
+        planId:
+          type: string
+        status:
+          type: string
+        message:
+          type: string
+    ServicePlanTaskActionRequest:
+      type: object
+      properties:
+        handledBy:
+          type: string
+          nullable: true
+        actionNote:
+          type: string
+          nullable: true
+    SaveServicePlanTaskNoteRequest:
+      type: object
+      required: [status, actionNote]
+      properties:
+        status:
+          type: string
+        actionNote:
+          type: string
+        handledBy:
+          type: string
+          nullable: true
+        handledAt:
+          type: string
+          nullable: true
+        handledAtIso:
+          type: string
+          nullable: true
+    ServicePlanTaskResponse:
+      type: object
+      required: [id, planId, elderlyName, room, title, owner, ownerName, ownerRole, reminder, scheduledTime, shift, careLevel, priority, status, sourceId, sourceStatus, originStatusLabel, originLabel, packageName]
+      properties:
+        id:
+          type: string
+        planId:
+          type: string
+        elderlyName:
+          type: string
+        room:
+          type: string
+        title:
+          type: string
+        owner:
+          type: string
+        ownerName:
+          type: string
+        ownerRole:
+          type: string
+        reminder:
+          type: string
+        scheduledTime:
+          type: string
+        shift:
+          type: string
+        careLevel:
+          type: string
+        priority:
+          type: string
+        status:
+          type: string
+        sourceId:
+          type: string
+        sourceStatus:
+          type: string
+        originStatusLabel:
+          type: string
+        originLabel:
+          type: string
+        packageName:
+          type: string
+        handledBy:
+          type: string
+          nullable: true
+        handledAt:
+          type: string
+          nullable: true
+        handledAtIso:
+          type: string
+          nullable: true
+        actionNote:
+          type: string
+          nullable: true
+    CareScheduleAssignmentResponse:
+      type: object
+      required: [assignmentId, planId, shift, elderlyName, packageName, room, status]
+      properties:
+        assignmentId:
+          type: string
+        planId:
+          type: string
+        shift:
+          type: string
+        elderlyName:
+          type: string
+        packageName:
+          type: string
+        room:
+          type: string
+        status:
+          type: string
+    CareScheduleCellResponse:
+      type: object
+      required: [dayLabel, assignments]
+      properties:
+        dayLabel:
+          type: string
+        assignments:
+          type: array
+          items:
+            $ref: '#/components/schemas/CareScheduleAssignmentResponse'
+    CareScheduleStaffRowResponse:
+      type: object
+      required: [staffId, staffName, staffRole, employmentSource, assignedPlans, exceptionPlans, pendingReviewPlans, cells]
+      properties:
+        staffId:
+          type: string
+        staffName:
+          type: string
+        staffRole:
+          type: string
+        employmentSource:
+          type: string
+        partnerAgencyName:
+          type: string
+          nullable: true
+        assignedPlans:
+          type: integer
+        exceptionPlans:
+          type: integer
+        pendingReviewPlans:
+          type: integer
+        cells:
+          type: array
+          items:
+            $ref: '#/components/schemas/CareScheduleCellResponse'
+    CareScheduleShiftSummaryResponse:
+      type: object
+      required: [shift, count]
+      properties:
+        shift:
+          type: string
+        count:
+          type: integer
+    CareScheduleDaySummaryResponse:
+      type: object
+      required: [dayLabel, shifts]
+      properties:
+        dayLabel:
+          type: string
+        shifts:
+          type: array
+          items:
+            $ref: '#/components/schemas/CareScheduleShiftSummaryResponse'
+    CareScheduleAttentionPlanResponse:
+      type: object
+      required: [id, elderlyName, packageName, ownerRole, ownerName, shift, status]
+      properties:
+        id:
+          type: string
+        elderlyName:
+          type: string
+        packageName:
+          type: string
+        ownerRole:
+          type: string
+        ownerName:
+          type: string
+        shift:
+          type: string
+        status:
+          type: string
+    CareScheduleBoardResponse:
+      type: object
+      required: [weekLabel, activePlans, pendingReviewPlans, unassignedPlans, thirdPartyAssignedPlans, publishedAssignments, shiftDemand, staffRows, daySummaries, attentionPlans]
+      properties:
+        weekLabel:
+          type: string
+        activePlans:
+          type: integer
+        pendingReviewPlans:
+          type: integer
+        unassignedPlans:
+          type: integer
+        thirdPartyAssignedPlans:
+          type: integer
+        publishedAssignments:
+          type: integer
+        shiftDemand:
+          type: array
+          items:
+            $ref: '#/components/schemas/CareScheduleShiftSummaryResponse'
+        staffRows:
+          type: array
+          items:
+            $ref: '#/components/schemas/CareScheduleStaffRowResponse'
+        daySummaries:
+          type: array
+          items:
+            $ref: '#/components/schemas/CareScheduleDaySummaryResponse'
+        attentionPlans:
+          type: array
+          items:
+            $ref: '#/components/schemas/CareScheduleAttentionPlanResponse'
+    CareWorkflowObservabilityResponse:
+      type: object
+      required: [pendingReviewPlans, unassignedPlans, archivedPlans, completedTasks, auditRecords, taskCompletionTotal, planArchiveTotal, unassignedBacklogGauge]
+      properties:
+        pendingReviewPlans:
+          type: integer
+        unassignedPlans:
+          type: integer
+        archivedPlans:
+          type: integer
+        completedTasks:
+          type: integer
+        auditRecords:
+          type: integer
+        taskCompletionTotal:
+          type: integer
+          format: int64
+        planArchiveTotal:
+          type: integer
+          format: int64
+        unassignedBacklogGauge:
+          type: integer
+          format: int64
+    CareWorkflowAuditResponse:
+      type: object
+      required: [auditId, aggregateType, aggregateId, actionType, operatorUserName, correlationId, createdAt]
+      properties:
+        auditId:
+          type: string
+        aggregateType:
+          type: string
+        aggregateId:
+          type: string
+        actionType:
+          type: string
+        operatorUserName:
+          type: string
+        correlationId:
+          type: string
+        detailJson:
+          type: string
+          nullable: true
+        createdAt:
+          type: string
+    NursingWorkflowBoardResponse:
+      type: object
+      required: [packages, plans, tasks, schedule, observability]
+      properties:
+        packages:
+          type: array
+          items:
+            $ref: '#/components/schemas/ServicePackageResponse'
+        plans:
+          type: array
+          items:
+            $ref: '#/components/schemas/ServicePlanResponse'
+        tasks:
+          type: array
+          items:
+            $ref: '#/components/schemas/ServicePlanTaskResponse'
+        schedule:
+          $ref: '#/components/schemas/CareScheduleBoardResponse'
+        observability:
+          $ref: '#/components/schemas/CareWorkflowObservabilityResponse'
+    AiEnvelopeBase:
+      type: object
+      required: [available, capability, provider, model, cached, latencyMs, traceId, auditId]
+      properties:
+        available:
+          type: boolean
+        capability:
+          type: string
+        provider:
+          type: string
+        model:
+          type: string
+        cached:
+          type: boolean
+        latencyMs:
+          type: integer
+        traceId:
+          type: string
+        auditId:
+          type: string
+    AiDashboardInsightsRequest:
+      type: object
+      required: [totalElders, activeCarePlans, openAlerts, pendingTasks, occupancyPercent]
+      properties:
+        totalElders:
+          type: integer
+        activeCarePlans:
+          type: integer
+        openAlerts:
+          type: integer
+        pendingTasks:
+          type: integer
+        occupancyPercent:
+          type: integer
+        additionalContext:
+          type: string
+          nullable: true
+    AiDashboardInsightsResponse:
+      type: object
+      required: [summary, keyInsights, actionItems]
+      properties:
+        summary:
+          type: string
+        keyInsights:
+          type: array
+          items:
+            type: string
+        actionItems:
+          type: array
+          items:
+            type: string
+    AiDashboardInsightsEnvelope:
+      allOf:
+        - $ref: '#/components/schemas/AiEnvelopeBase'
+        - type: object
+          properties:
+            result:
+              $ref: '#/components/schemas/AiDashboardInsightsResponse'
+    AiHealthRiskRequest:
+      type: object
+      required: [elderId, elderName, bloodPressure, heartRate, temperature, bloodSugar, oxygen]
+      properties:
+        elderId:
+          type: string
+        elderName:
+          type: string
+        bloodPressure:
+          type: string
+        heartRate:
+          type: integer
+        temperature:
+          type: number
+        bloodSugar:
+          type: number
+        oxygen:
+          type: integer
+        currentMedications:
+          type: string
+          nullable: true
+        medicalHistory:
+          type: string
+          nullable: true
+    AiHealthRiskResponse:
+      type: object
+      required: [riskLevel, explanation, recommendations, monitoringPoints]
+      properties:
+        riskLevel:
+          type: string
+        explanation:
+          type: string
+        recommendations:
+          type: array
+          items:
+            type: string
+        monitoringPoints:
+          type: array
+          items:
+            type: string
+    AiHealthRiskEnvelope:
+      allOf:
+        - $ref: '#/components/schemas/AiEnvelopeBase'
+        - type: object
+          properties:
+            result:
+              $ref: '#/components/schemas/AiHealthRiskResponse'
+    AiTaskPriorityRequest:
+      type: object
+      required: [tasks]
+      properties:
+        tasks:
+          type: array
+          items:
+            $ref: '#/components/schemas/AiTaskPriorityItem'
+    AiTaskPriorityItem:
+      type: object
+      required: [taskId, title, elderName, careLevel, dueAt, status]
+      properties:
+        taskId:
+          type: string
+        title:
+          type: string
+        elderName:
+          type: string
+        careLevel:
+          type: string
+        dueAt:
+          type: string
+        status:
+          type: string
+    AiTaskPriorityRankedItem:
+      type: object
+      required: [taskId, rank, priority, reason]
+      properties:
+        taskId:
+          type: string
+        rank:
+          type: integer
+        priority:
+          type: string
+        reason:
+          type: string
+    AiTaskPriorityResponse:
+      type: object
+      required: [rankedTasks, rationale]
+      properties:
+        rankedTasks:
+          type: array
+          items:
+            $ref: '#/components/schemas/AiTaskPriorityRankedItem'
+        rationale:
+          type: string
+    AiTaskPriorityEnvelope:
+      allOf:
+        - $ref: '#/components/schemas/AiEnvelopeBase'
+        - type: object
+          properties:
+            result:
+              $ref: '#/components/schemas/AiTaskPriorityResponse'
+    AiChatRequest:
+      type: object
+      required: [message]
+      properties:
+        message:
+          type: string
+        conversationId:
+          type: string
+          nullable: true
+        userRole:
+          type: string
+          nullable: true
+    AiChatResponse:
+      type: object
+      required: [reply, conversationId]
+      properties:
+        reply:
+          type: string
+        conversationId:
+          type: string
+    AiChatEnvelope:
+      allOf:
+        - $ref: '#/components/schemas/AiEnvelopeBase'
+        - type: object
+          properties:
+            result:
+              $ref: '#/components/schemas/AiChatResponse'
+    AiRuleResponse:
+      type: object
+      required: [ruleId, ruleCode, ruleName, description, capability, isEnabled, priority, updatedAtUtc]
+      properties:
+        ruleId:
+          type: string
+        ruleCode:
+          type: string
+        ruleName:
+          type: string
+        description:
+          type: string
+        capability:
+          type: string
+        isEnabled:
+          type: boolean
+        priority:
+          type: integer
+        updatedAtUtc:
+          type: string
+          format: date-time
+    AiRuleToggleRequest:
+      type: object
+      required: [isEnabled]
+      properties:
+        isEnabled:
+          type: boolean
+    AiModelStatusResponse:
+      type: object
+      required: [provider, model, capability, isReachable, checkedAtUtc]
+      properties:
+        provider:
+          type: string
+        model:
+          type: string
+        capability:
+          type: string
+        isReachable:
+          type: boolean
+        latencyMs:
+          type: integer
+          nullable: true
+        checkedAtUtc:
+          type: string
+          format: date-time
+    AiAuditLogResponse:
+      type: object
+      required: [auditId, tenantId, userId, capability, provider, model, endpoint, cached, latencyMs, success, createdAtUtc]
+      properties:
+        auditId:
+          type: string
+        tenantId:
+          type: string
+        userId:
+          type: string
+        capability:
+          type: string
+        provider:
+          type: string
+        model:
+          type: string
+        endpoint:
+          type: string
+        cached:
+          type: boolean
+        latencyMs:
+          type: integer
+        success:
+          type: boolean
+        errorMessage:
+          type: string
+          nullable: true
+        createdAtUtc:
+          type: string
+          format: date-time
+    AiAuditLogListResponse:
+      type: object
+      required: [items, total, page, pageSize]
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/AiAuditLogResponse'
+        total:
+          type: integer
+        page:
+          type: integer
+        pageSize:
+          type: integer
+    AiShiftSummaryRequest:
+      type: object
+      required: [shift, completedTasks, pendingTasks, alerts]
+      properties:
+        shift:
+          type: string
+        completedTasks:
+          type: integer
+        pendingTasks:
+          type: integer
+        alerts:
+          type: integer
+        notes:
+          type: string
+          nullable: true
+    AiShiftSummaryResponse:
+      type: object
+      required: [summary, keyPoints, handoverItems]
+      properties:
+        summary:
+          type: string
+        keyPoints:
+          type: array
+          items:
+            type: string
+        handoverItems:
+          type: array
+          items:
+            type: string
+    AiShiftSummaryEnvelope:
+      allOf:
+        - $ref: '#/components/schemas/AiEnvelopeBase'
+        - type: object
+          properties:
+            result:
+              $ref: '#/components/schemas/AiShiftSummaryResponse'
+    AiHandoverDraftRequest:
+      type: object
+      required: [fromShift, toShift, completedItems, pendingItems, alerts]
+      properties:
+        fromShift:
+          type: string
+        toShift:
+          type: string
+        completedItems:
+          type: array
+          items:
+            type: string
+        pendingItems:
+          type: array
+          items:
+            type: string
+        alerts:
+          type: array
+          items:
+            type: string
+    AiHandoverDraftResponse:
+      type: object
+      required: [draft, criticalItems]
+      properties:
+        draft:
+          type: string
+        criticalItems:
+          type: array
+          items:
+            type: string
+    AiHandoverDraftEnvelope:
+      allOf:
+        - $ref: '#/components/schemas/AiEnvelopeBase'
+        - type: object
+          properties:
+            result:
+              $ref: '#/components/schemas/AiHandoverDraftResponse'
+    AiEscalationDraftRequest:
+      type: object
+      required: [alertType, elderName, description, currentStatus]
+      properties:
+        alertType:
+          type: string
+        elderName:
+          type: string
+        description:
+          type: string
+        currentStatus:
+          type: string
+    AiEscalationDraftResponse:
+      type: object
+      required: [draft, suggestedRecipient, priority]
+      properties:
+        draft:
+          type: string
+        suggestedRecipient:
+          type: string
+        priority:
+          type: string
+    AiEscalationDraftEnvelope:
+      allOf:
+        - $ref: '#/components/schemas/AiEnvelopeBase'
+        - type: object
+          properties:
+            result:
+              $ref: '#/components/schemas/AiEscalationDraftResponse'
+    AiFamilyTodaySummaryRequest:
+      type: object
+      required: [elderName, careLevel, healthSummary, completedTasks, pendingTasks, recentNotes]
+      properties:
+        elderName:
+          type: string
+        careLevel:
+          type: string
+        healthSummary:
+          type: string
+        completedTasks:
+          type: integer
+        pendingTasks:
+          type: integer
+        recentNotes:
+          type: array
+          items:
+            type: string
+    AiFamilyQaItem:
+      type: object
+      required: [question, answer]
+      properties:
+        question:
+          type: string
+        answer:
+          type: string
+    AiFamilyTodaySummaryResponse:
+      type: object
+      required: [summary, frequentQuestions]
+      properties:
+        summary:
+          type: string
+        frequentQuestions:
+          type: array
+          items:
+            $ref: '#/components/schemas/AiFamilyQaItem'
+    AiFamilyTodaySummaryEnvelope:
+      allOf:
+        - $ref: '#/components/schemas/AiEnvelopeBase'
+        - type: object
+          properties:
+            result:
+              $ref: '#/components/schemas/AiFamilyTodaySummaryResponse'
+    AiHealthExplainRequest:
+      type: object
+      required: [elderName, metricName, metricValue, normalRange]
+      properties:
+        elderName:
+          type: string
+        metricName:
+          type: string
+        metricValue:
+          type: string
+        normalRange:
+          type: string
+        trendDescription:
+          type: string
+          nullable: true
+    AiHealthExplainResponse:
+      type: object
+      required: [explanation, recommendation]
+      properties:
+        explanation:
+          type: string
+        recommendation:
+          type: string
+    AiHealthExplainEnvelope:
+      allOf:
+        - $ref: '#/components/schemas/AiEnvelopeBase'
+        - type: object
+          properties:
+            result:
+              $ref: '#/components/schemas/AiHealthExplainResponse'
+    AiVisitAssistantRequest:
+      type: object
+      required: [elderName, careLevel]
+      properties:
+        elderName:
+          type: string
+        careLevel:
+          type: string
+        recentHealthSummary:
+          type: string
+          nullable: true
+        preferredTimeSlots:
+          type: array
+          nullable: true
+          items:
+            type: string
+    AiVisitAssistantResponse:
+      type: object
+      required: [suggestedTimeSlots, visitTips, recommendation]
+      properties:
+        suggestedTimeSlots:
+          type: array
+          items:
+            type: string
+        visitTips:
+          type: array
+          items:
+            type: string
+        recommendation:
+          type: string
+    AiVisitAssistantEnvelope:
+      allOf:
+        - $ref: '#/components/schemas/AiEnvelopeBase'
+        - type: object
+          properties:
+            result:
+              $ref: '#/components/schemas/AiVisitAssistantResponse'

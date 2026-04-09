@@ -38,11 +38,13 @@
 
 - [Admin 顶部导航响应式设计](/architecture/admin-navbar-responsive)
 - [三端前端输入分析与后端约束](/architecture/frontend-backend-input-analysis)
+- [基于现有 API 清单的 Backend 架构设计](/architecture/backend-api-inventory-architecture)
 - [SaaS 微服务后端总体架构](/architecture/backend-saas-microservice-architecture)
 - [后端服务设计与边界说明](/architecture/backend-service-domain-design)
 - [后端数据流与核心 Workflow](/architecture/backend-dataflow-workflows)
 - [Admin 与 Nani 打卡工作流](/architecture/admin-nani-clockin-workflow)
 - [Admin 护理工作流真实化竖切](/architecture/backend-admin-care-workflow-realization)
+- [Backend + Admin 内容管理设计补全](/architecture/backend-admin-content-management-design)
 - [Backend 技术选型：.NET 还是 Spring Cloud](/architecture/backend-tech-selection-dotnet-vs-spring)
 - [Backend 云原生 Kubernetes 架构](/architecture/backend-cloud-native-kubernetes-architecture)
 
@@ -74,6 +76,7 @@
 - 目录: `docs/api/`
 - 说明: 存放接口协议、字段定义、示例请求响应
 - 初始文档: [核心模块 API 草案](/api/core-modules)
+- [Backend 统一 OpenAPI 规范（Phase 1）](/api/backend-bff-openapi)
 
 ### 模块 API
 
