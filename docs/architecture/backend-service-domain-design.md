@@ -12,6 +12,7 @@
 - 以领域边界而不是页面目录拆服务。
 - 以写模型归属定义服务所有权，以读模型聚合交给 BFF。
 - 先保证服务边界清晰，再决定是否进一步细分子服务。
+- 每个拥有持久化写模型的领域服务默认使用独立数据库；服务之间通过 API、事件或投影交互，而不是共用业务表。
 
 ## Edge 服务
 
@@ -108,3 +109,10 @@
 ## 设计结论
 
 当前服务粒度既能支持三端协同，也能为后续 SaaS 多租户、IoT 接入、AI 扩展和报表读模型提供演进空间；它避免了按页面拆服务，也避免了过早把所有运营对象压成单体后端。
+
+## 数据库边界补充
+
+- Identity 与 Tenant 当前可保持轻量服务形态；Tenant 是否持久化可按后续需求决定。
+- Elder、Health、Care、Visit、Billing、Notification、Config、AI Orchestration 一旦持久化，默认各自拥有独立 PostgreSQL 数据库。
+- 本地开发可以继续共用同一个 PostgreSQL 实例，但必须为不同服务创建不同 database，而不是把全部表放进同一个 `nursing_platform`。
+- migration、seed、event worker 和 design-time DbContext factory 都必须按服务数据库分别配置，避免一个服务的建表流程依赖另一个服务的数据库状态。

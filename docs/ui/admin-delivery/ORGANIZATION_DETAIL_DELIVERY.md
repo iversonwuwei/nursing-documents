@@ -4,13 +4,13 @@
 
 - Entry route: src/app/organizations/[id]/page.tsx
 - Affected users: 机构运营、床位协调、院长与人力协同用户
-- Rollout stage: 第六批设备与组织扩展路由治理说明
+- Rollout stage: 机构详情 Fluent 收口批次
 
 ## User Impact
 
-- 机构详情页承担机构概览、床位管理、员工管理与对象级 AI 组织摘要的合流入口。
-- 详情页现在也能读取新建待启用机构，不再只依赖本地硬编码对象。
-- 保持床位和员工管理仍是只读原型展示，不自动改床位或调整人员配置。
+- 机构详情页继续承担机构概览、床位管理、员工管理与对象级 AI 组织摘要，但首屏先展示对象总览和当前 tab，再把状态、AI 解释和帮助入口后置。
+- 详情页继续能读取新建待启用机构，不再只依赖本地硬编码对象。
+- 页面不再保留无实际落点的假编辑主按钮；待启用机构保留启用动作，其余对象以只读治理与下钻为主。
 
 ## Data Source
 
@@ -20,15 +20,15 @@
 
 ## UI States
 
-- Loading state: 当前为本地同步 mock；后续接真实机构详情接口时需补 tab 内加载反馈。
-- Empty state: 当前样本非空；未来若未命中组织或某 tab 无数据，需保持局部空态而不破坏详情骨架。
-- Error state: 概览、床位、员工与 AI 摘要口径不一致时需局部暴露。
-- Mobile impact: 多 tab、多表格和多 AI 卡并存，后续改动需验证窄屏堆叠和 tab 可达性。
+- Loading state: 当前为本地同步对象；tab 切换不应打断详情骨架。
+- Empty state: 未命中机构时需显式提示对象不存在，而不是继续回退默认对象。
+- Error state: 概览、床位、员工与 AI 摘要口径不一致时需在当前 tab 或上下文区局部暴露。
+- Mobile impact: 详情页保持单列纵向结构，tab、KPI、台账与帮助入口都要可达。
 
 ## Health Signals
 
-- Healthy signal: 机构概览、待启用状态、床位管理、员工管理和 AI 组织摘要围绕同一机构上下文保持一致。
-- Failure signal: tab 内容错位、机构对象映射错误，或新建机构详情被回退到错误默认对象。
+- Healthy signal: 机构概览、待启用状态、床位管理、员工管理和后置上下文围绕同一机构上下文保持一致。
+- Failure signal: tab 内容错位、机构对象映射错误、详情页仍保留无落点主按钮，或帮助边界重新回到首屏长说明。
 - Verification proxy: lint 通过；行为改动时加 build 与机构详情人工回归。
 
 ## Verification

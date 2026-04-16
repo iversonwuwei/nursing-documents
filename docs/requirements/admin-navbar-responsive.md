@@ -4,7 +4,7 @@
 
 - scope: 为 nursing-admin-v2 的全局顶部导航补齐响应式布局，覆盖桌面、平板和移动端访问场景。
 - affected users: admin 全量运营用户、值班主管、机构管理员、评定管理人员。
-- changed behavior: 导航不再只依赖固定桌面横排；当宽度不足时自动退化为汉堡菜单和抽屉导航。
+- changed behavior: 导航不再只依赖固定桌面横排；当宽度不足时自动退化为“更多”菜单和抽屉导航，同时继续复用当前信息架构定义。
 - dependent systems: nursing-admin-v2 顶部壳层、全局页面布局、现有路由体系。
 - verification: nursing-documents `npm run docs:build`，nursing-admin-v2 `npm run lint` 与 `npm run build`。
 - rollback: 回退导航组件、全局样式和本文件。
@@ -12,7 +12,7 @@
 ## 目标
 
 - 保证 admin 全局导航在 13 寸笔记本、平板和手机宽度下都可访问，不出现顶栏挤压、换行错位或菜单被截断。
-- 保持当前信息架构不变，不借这次改造重组导航分组或改写路由语义。
+- 保持响应式规则与信息架构解耦；导航分组与路由归属调整应单独记录在信息架构文档中，而不是散落在样式改造说明里。
 - 把“桌面横向导航”和“移动抽屉导航”收敛为同一套导航源，避免后续维护两套菜单定义。
 
 ## 用户影响
@@ -39,6 +39,7 @@
 ## 当前实现映射
 
 - 顶部导航唯一入口仍然是 `src/components/layout/TopNavbar.tsx`。
+- 当前导航分组、模块归属和角色排序见 [Admin 顶部导航信息架构重组](/requirements/admin-navbar-information-architecture)。
 - 页面壳层与内容偏移仍然由 `src/components/layout/app-wrapper.tsx` 和 `src/app/globals.css` 控制。
 - 当前阶段只做前端响应式行为修正，不涉及真实接口、权限模型或动态菜单下发。
 

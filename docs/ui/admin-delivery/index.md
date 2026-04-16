@@ -119,6 +119,10 @@
 
 - [AI Assistant Root](./AI_ASSISTANT_DELIVERY.md)
 
+### Batch 25
+
+- [AI QA](./AI_QA_DELIVERY.md)
+
 ### Batch 14
 
 - [Organizations New](./ORGANIZATIONS_NEW_DELIVERY.md)
@@ -138,6 +142,10 @@
 - [Staff New](./STAFF_NEW_DELIVERY.md)
 - [Equipment New](./EQUIPMENT_NEW_DELIVERY.md)
 - [Supplies New](./SUPPLIES_NEW_DELIVERY.md)
+
+### Batch 24
+
+- [Institutional Elderly Entrustment](./INSTITUTIONAL_ELDERLY_ENTRUSTMENT_DELIVERY.md)
 - [Elderly Health New](./ELDERLY_HEALTH_NEW_DELIVERY.md)
 - [Elderly Vitals New](./ELDERLY_VITALS_NEW_DELIVERY.md)
 - [Elderly Visits New](./ELDERLY_VISITS_NEW_DELIVERY.md)
@@ -161,6 +169,14 @@
 ### Batch 21
 
 - [Nursing Check-in](./NURSING_CHECKIN_DELIVERY.md)
+
+### Batch 22
+
+- [Operations Daily](./OPERATIONS_DAILY_DELIVERY.md)
+
+### Batch 23
+
+- [Elderly Detail Live Profile](./ELDERLY_DETAIL_LIVE_PROFILE_DELIVERY.md)
 
 ## Next Steps
 

@@ -16,10 +16,20 @@
 
 ### 核心模块
 
+- [Admin 交互静态分栏原则](/requirements/admin-interaction-static-layout)
 - [Admin 顶部导航响应式改造](/requirements/admin-navbar-responsive)
+- [Admin 顶部导航信息架构重组](/requirements/admin-navbar-information-architecture)
+- [Admin 共享页面场景上下文扩展](/requirements/admin-shared-page-scene-context)
+- [Admin 日班工作台 Live Snapshot 边界收敛](/requirements/admin-daily-operations-live-snapshot)
+- [Admin 长者详情首屏 Live Profile 收敛](/requirements/admin-elderly-detail-live-profile)
+- [Admin 机构养老委托入住工作流](/requirements/admin-institutional-entrusted-admission-workflow)
+- [Admin SaaS 基线对齐](/requirements/admin-saas-foundation-alignment)
+- [Admin SaaS 业务模块订阅](/requirements/admin-saas-billable-modules)
 - [长者管理](/requirements/elderly-management)
 - [健康监测](/requirements/health-monitoring)
 - [报警与事件](/requirements/alerts-incidents)
+- [Admin 报警财务通知补齐](/requirements/admin-alert-finance-notification-gap-closure)
+- [Backend 数据库初始化与测试数据入库](/requirements/backend-database-bootstrap-seeding)
 - [Nani 打卡与打卡管理](/requirements/nani-clockin-workflow)
 - [员工协同](/requirements/staff-collaboration)
 - [机构管理](/requirements/organization-management)
@@ -36,11 +46,21 @@
 
 ### Backend 专题
 
+- [Admin 交互静态分栏布局设计](/architecture/admin-interaction-static-layout)
 - [Admin 顶部导航响应式设计](/architecture/admin-navbar-responsive)
+- [Admin 顶部导航信息架构设计](/architecture/admin-navbar-information-architecture)
+- [Admin 共享页面场景上下文设计](/architecture/admin-shared-page-scene-context)
+- [Admin 日班工作台 Live Snapshot 设计](/architecture/admin-daily-operations-live-snapshot)
+- [Admin 长者详情首屏 Live Profile 设计](/architecture/admin-elderly-detail-live-profile)
+- [Admin 机构养老委托入住工作流设计](/architecture/admin-institutional-entrusted-admission-workflow)
+- [Admin SaaS 基线设计](/architecture/admin-saas-foundation-alignment)
+- [Admin SaaS 业务模块架构设计](/architecture/admin-saas-billable-modules)
+- [Admin 报警财务通知服务设计](/architecture/admin-alert-finance-notification-service-design)
 - [三端前端输入分析与后端约束](/architecture/frontend-backend-input-analysis)
 - [基于现有 API 清单的 Backend 架构设计](/architecture/backend-api-inventory-architecture)
 - [SaaS 微服务后端总体架构](/architecture/backend-saas-microservice-architecture)
 - [后端服务设计与边界说明](/architecture/backend-service-domain-design)
+- [Backend 数据库初始化与种子设计](/architecture/backend-database-bootstrap-seed-design)
 - [后端数据流与核心 Workflow](/architecture/backend-dataflow-workflows)
 - [Admin 与 Nani 打卡工作流](/architecture/admin-nani-clockin-workflow)
 - [Admin 护理工作流真实化竖切](/architecture/backend-admin-care-workflow-realization)
@@ -83,6 +103,8 @@
 - [长者管理 API](/api/elderly-management)
 - [健康监测 API](/api/health-monitoring)
 - [报警与事件 API](/api/alerts-incidents)
+- [Admin SaaS 业务模块契约](/api/admin-saas-module-entitlement-contracts)
+- [Admin 报警财务通知服务契约](/api/admin-alert-finance-notification-service-contracts)
 - [员工协同 API](/api/staff-collaboration)
 - [机构管理 API](/api/organization-management)
 - [房间与床位 API](/api/room-management)
@@ -92,6 +114,7 @@
 
 ### 接口级文档
 
+- [Admin Dashboard 聚合总览](/api/endpoint-admin-dashboard-overview)
 - [长者列表查询](/api/endpoint-elderly-list)
 - [长者详情查询](/api/endpoint-elderly-detail)
 - [健康监测列表](/api/endpoint-health-monitoring-list)

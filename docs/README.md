@@ -18,7 +18,7 @@ hero:
 
 features:
   - title: 模块化需求
-    details: 已按长者、健康、报警、员工、房间、设备、物资、AI 中心拆成独立模块文档。
+    details: 已按长者、健康、报警、员工、房间、设备、物资、AI 中心拆成独立模块文档，并补充 SaaS 业务模块订阅、报警/财务/通知三服务设计专题。
   - title: 平台专题归档
     details: 原 admin 工程 docs 已整体迁入当前站点，平台架构、设计和数据库资料统一在这里维护。
   - title: 可预览站点
@@ -56,6 +56,8 @@ features:
 - [长者管理](/requirements/elderly-management)
 - [健康监测](/requirements/health-monitoring)
 - [报警与事件](/requirements/alerts-incidents)
+- [Admin SaaS 业务模块订阅](/requirements/admin-saas-billable-modules)
+- [Admin 报警财务通知补齐](/requirements/admin-alert-finance-notification-gap-closure)
 - [员工协同](/requirements/staff-collaboration)
 - [房间与床位](/requirements/room-management)
 - [设备管理](/requirements/equipment-management)

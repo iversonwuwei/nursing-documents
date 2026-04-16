@@ -4,11 +4,12 @@
 
 - Entry route: src/app/rooms/[id]/page.tsx
 - Affected users: 前台入住协调、床位运营、护理主管与机构协同用户
-- Rollout stage: 第八批详情与根路由治理说明
+- Rollout stage: 第十九批物资、房间与员工页面主区收口
 
 ## User Impact
 
 - 房间详情页承担房间状态、床位占用、设施信息和 AI 房间建议的对象级查看入口。
+- 主工作区优先保留对象状态、床位占用、房间事实和设施信息，把 AI 解释、照护建议和帮助入口后置到信息轨。
 - 详情页现在也能读取新建待启用房间，不再只依赖本地硬编码对象。
 - 保持床位安排和照护动作仍由人工决策，不自动完成入住分配。
 
@@ -35,7 +36,7 @@
 
 - Minimum gate: npm run lint
 - Stronger gate for behavior changes: npm run lint and npm run build
-- Manual path: 验证房间详情、床位对象链接和 AI 房间建议链路
+- Manual path: 验证房间详情、床位对象链接、帮助入口和 AI 房间建议链路
 
 ## Rollback
 

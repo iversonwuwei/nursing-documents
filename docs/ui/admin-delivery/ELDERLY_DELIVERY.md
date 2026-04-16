@@ -4,32 +4,33 @@
 
 - Entry route: src/app/elderly/page.tsx
 - Affected users: 前台接待、护理主管、运营与档案管理用户
-- Rollout stage: 第一批高频路由治理说明
+- Rollout stage: 老人台账 Fluent 收敛与主入口强化
 
 ## User Impact
 
-- 老人列表页仍承担搜索、筛选、分页和进入详情的主入口职责。
-- 列表现在同时展示静态台账与新建闭环中的对象，并在顶部暴露入住审核入口。
-- 新增老人与资料导入不再是孤立按钮，而是统一进入“录入或导入 -> 审核 -> 入住 -> 台账”的治理链路。
-- 列表需要直接回挂人脸录入状态，并提供行级快捷动作，避免前台在详情页和人脸页之间反复跳转查找对象。
+- 老人列表页继续承担搜索、筛选、分页和进入详情的主入口职责，但首屏进一步收敛为“台账总览 + 关键治理闭环 + 列表处理区”。
+- 新增老人与资料导入继续进入统一治理链路，但说明性闭环块需要采用 Fluent 风格的轻量治理卡，而不是旧式统计块。
+- 人脸录入状态与快捷动作继续保留在主列表，避免前台在详情页和人脸页之间反复跳转查找对象。
+- 页面上下文说明收敛到后置区域或帮助页，不再与主筛选和列表并排竞争首屏注意力。
 
 ## Data Source
 
 - Route type: client page with local filter state + shared workflow subscriptions
 - Primary data: static elderlyList plus admission-workflow shared store merged through elderly-registry helper, and face-enrollment workflow shared store for人脸状态
 - Downstream links: elderly detail pages, elderly new page, elderly import page, checkin workflow entry, and face enrollment workflow entry
+- Visual scope: Microsoft Fluent 2 inspired page-level restyle only; no contract or store changes introduced
 
 ## UI States
 
 - Loading state: 当前为本地数据加共享 store，后续接接口时需要补首屏加载与分页切换反馈。
 - Empty state: 搜索或筛选无结果时维持 EmptyState 搜索空态。
 - Error state: 若 shared store 与静态台账口径不一致，应优先暴露列表映射异常，不能静默吞掉。
-- Mobile impact: 表格在较窄宽度下需要确认横向滚动和操作列可达性。
+- Mobile impact: KPI、治理闭环卡和筛选区继续保持纵向阅读顺序；表格在较窄宽度下仍需确认横向滚动和操作列可达性。
 
 ## Health Signals
 
-- Healthy signal: 搜索、护理等级筛选、状态筛选和分页能稳定组合，新建与导入对象都能进入入住审核并回流列表，人脸状态与人脸页口径一致。
-- Failure signal: shared store 新建或导入记录未出现在列表、入口跳转错误、详情映射失效，或人脸状态与人脸录入页不一致。
+- Healthy signal: 首屏先完成“判断当前台账压力 -> 进入审核、导入或详情处理”的闭环；搜索、护理等级筛选、状态筛选和分页保持稳定组合。
+- Failure signal: 页面重新堆入训练性说明卡，或 shared store 新建/导入记录未出现在列表、人脸状态与人脸录入页不一致。
 - Verification proxy: lint 通过；行为变更时加 build 与手工列表流回归。
 
 ## Verification

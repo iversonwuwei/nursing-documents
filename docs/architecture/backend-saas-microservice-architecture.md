@@ -94,15 +94,18 @@ Platform Layer
 
 ### 数据隔离策略
 
-按租户规模分级支持：
+按两层边界统一设计：
+
+- 第一层: 服务边界。每个领域服务默认拥有自己的独立数据库，不与其他服务共享写库。
+- 第二层: 租户边界。在各自服务库内继续按 tenant context、tenant-aware repository、tenant-aware cache key 和 tenant-aware audit 做逻辑隔离，并为后续 RLS / database-per-tenant 演进保留空间。
 
 | 场景 | 推荐隔离方式 | 说明 |
 | --- | --- | --- |
-| 小中型 SaaS 租户 | shared database + tenant_id + RLS | 成本低，适合标准化托管 |
-| 大型连锁客户 | database per tenant 或 schema per tenant | 便于性能隔离与合规扩展 |
-| 高敏机构 | 独立部署单元 | 满足强隔离与私有化要求 |
+| 标准托管 SaaS | service database + tenant_id + 可选 RLS | 先保证服务写模型边界，再做租户逻辑隔离 |
+| 大型连锁客户 | service database + schema per tenant 或 database per tenant | 便于性能隔离、审计和套餐扩展 |
+| 高敏机构 | 独立部署单元 + service database | 满足强隔离、私有化和合规要求 |
 
-推荐在第一阶段统一实现 tenant context、tenant-aware repository、tenant-aware cache key 和 tenant-aware audit，再按套餐扩展到 schema 或 database 级隔离。
+不再把“所有服务共用一个业务数据库”作为阶段一默认实现，因为这会削弱服务边界，也会放大启动、迁移和故障耦合。
 
 ### 配置与特性开关
 

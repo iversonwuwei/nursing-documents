@@ -4,12 +4,12 @@
 
 - Entry route: src/app/supplies/page.tsx
 - Affected users: 采购、仓储、护理站和值班管理协同用户
-- Rollout stage: 第六批设备与组织扩展路由治理说明
+- Rollout stage: 第十九批物资、房间与员工页面主区收口
 
 ## User Impact
 
 - 物资管理页承担物资搜索、分类筛选、库存不足识别和进入入库动作的主入口。
-- 当前交付单元先固定说明与验证门禁，不改现有物资列表、筛选和 AI 补货摘要行为。
+- 主工作区优先保留补货总览、待处理队列、筛选和物资表格，把推荐路径、AI 补货解释和帮助入口后置到信息轨。
 - 保持补货和采购仍由人工审批与执行，AI 只做优先级与缺口建议。
 
 ## Data Source
@@ -23,7 +23,7 @@
 - Loading state: 当前为本地同步 mock；后续接库存系统时需补筛选和分页反馈。
 - Empty state: 搜索或分类筛选无结果时应保持搜索空态。
 - Error state: 库存统计、列表和 AI 补货摘要口径不一致时需局部暴露。
-- Mobile impact: 物资表格列较多，后续改动需验证窄屏滚动与入库 CTA 可达性。
+- Mobile impact: 物资表格列较多，后续改动需验证窄屏滚动、信息轨堆叠顺序与入库 CTA 可达性。
 
 ## Health Signals
 
@@ -35,7 +35,7 @@
 
 - Minimum gate: npm run lint
 - Stronger gate for behavior changes: npm run lint and npm run build
-- Manual path: 验证搜索、分类筛选、空态、入库入口和 AI 链路
+- Manual path: 验证总览指标、优先队列、搜索筛选、空态、入库入口、帮助入口和 AI 链路
 
 ## Rollback
 

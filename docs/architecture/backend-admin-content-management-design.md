@@ -563,6 +563,7 @@ Response 304 (无变更):
 | 功能 | 说明 |
 |------|------|
 | 列表展示 | 显示 text_key、text_value（截断）、description、命名空间标签、最后修改时间 |
+| 统计卡片 | 命名空间卡片数量必须来自 Config Service 列表接口返回的真实 total；不可再复用前端 demo helper 或硬编码样例 |
 | 筛选 | 按命名空间（app_family / app_nani / admin / common）、语言（zh-CN / en-US） |
 | 搜索 | 按 text_key 或 text_value 模糊搜索 |
 | 编辑 | 弹窗编辑，显示完整 key、当前值、说明、多语言 tab 切换 |
@@ -570,6 +571,13 @@ Response 304 (无变更):
 | 批量导入 | 支持 Excel / JSON 格式上传，预览变更行后确认导入 |
 | 批量导出 | 导出当前筛选范围的数据为 Excel / JSON |
 | 删除 | 仅 admin 角色可删，删除前二次确认，系统 key（is_system 标记）不可删 |
+
+静态文本页的健康信号定义如下：
+
+- scope: `/settings/static-texts` 的列表、分页总数与命名空间统计卡片统一收敛到 Config Service -> Admin BFF -> Admin 前端的只读链路。
+- affected audience: 内容编辑、机构管理员、超级管理员；viewer 保持只读。
+- verification: `npm run docs:build`；前端运行时确认筛选列表总数与命名空间卡片都能在真实后端返回下稳定展示，不再因本地 demo helper 导致统计与列表不一致。
+- rollback: 恢复前端统计卡片到旧的本地 helper 计算逻辑，服务端接口与数据库结构无需回退。
 
 #### 2.2.3 编辑弹窗
 

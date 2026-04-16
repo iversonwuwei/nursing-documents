@@ -357,7 +357,11 @@ POST /api/family/ai/family-chat           → AI /api/ai/family-chat
 
 ### 现有数据库
 
-所有服务共享 PostgreSQL 单实例 `nursing_platform`，按 `TenantId` 逻辑隔离。
+AI Orchestration 不再与其他服务共用业务数据库。默认基线是：
+
+- PostgreSQL 实例可共用
+- AI Orchestration 使用独立数据库，例如 `nursing_ai`
+- AI 库内继续按 `TenantId` 做逻辑隔离和审计归档
 
 ### AI Orchestration 新增表
 
@@ -372,7 +376,7 @@ POST /api/family/ai/family-chat           → AI /api/ai/family-chat
 ```json
 {
   "ConnectionStrings": {
-    "Postgres": "${DATABASE_CONNECTION_STRING:Host=localhost;Port=5432;Database=nursing_platform;Username=nursing;Password=nursing}"
+    "Postgres": "${DATABASE_CONNECTION_STRING:Host=localhost;Port=5432;Database=nursing_ai;Username=nursing;Password=nursing}"
   }
 }
 ```
@@ -438,7 +442,7 @@ POST /api/family/ai/family-chat           → AI /api/ai/family-chat
 | `RabbitMQ:Port` | `RABBITMQ_PORT` | `5672` | RabbitMQ 端口 |
 | `RabbitMQ:UserName` | `RABBITMQ_USERNAME` | `guest` | RabbitMQ 用户 |
 | `RabbitMQ:Password` | `RABBITMQ_PASSWORD` | `guest` | RabbitMQ 密码 |
-| `ConnectionStrings:Postgres` | `DATABASE_CONNECTION_STRING` | `Host=localhost;...` | PostgreSQL 连接串 |
+| `ConnectionStrings:Postgres` | `DATABASE_CONNECTION_STRING` | `Host=localhost;...Database=nursing_ai;...` | AI 服务专属 PostgreSQL 连接串 |
 | `ServiceEndpoints:AiOrchestration` | — | `http://localhost:5267` | AI 服务地址 |
 
 ---

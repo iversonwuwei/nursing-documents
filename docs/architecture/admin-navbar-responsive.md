@@ -4,17 +4,18 @@
 
 - scope: 定义 nursing-admin-v2 顶部导航在不同视口宽度下的适配策略、状态管理和回滚路径。
 - boundaries: 仅覆盖 `TopNavbar`、`AppWrapper` 和全局样式中的导航壳层，不改业务路由内容。
-- dependencies: Next.js App Router、现有 `NAV_ITEMS` 单一导航源、全局 CSS 断点。
+- dependencies: Next.js App Router、现有 `BASE_NAV_ITEMS + getOrderedNavItems(role)` 单一导航源、全局 CSS 断点。
 - failure modes: 顶栏拥挤但未切换为抽屉、下拉层被导航容器裁切、抽屉打开后无法关闭、路由切换后菜单状态残留、窄屏内容间距异常。
 - verification: nursing-documents `npm run docs:build`，admin `npm run lint` 与 `npm run build`。
 - rollback: 回退 `TopNavbar.tsx`、`globals.css` 与本文件。
 
 ## Design Strategy
 
-- 使用单一导航源 `NAV_ITEMS` 同时驱动桌面横向菜单、桌面“更多”溢出菜单和移动抽屉菜单。
+- 使用单一导航源 `BASE_NAV_ITEMS` 同时驱动桌面横向菜单、桌面“更多”溢出菜单和移动抽屉菜单，再通过 `getOrderedNavItems(role)` 叠加角色顺序。
 - 顶栏先基于导航区可用宽度计算当前可显示的一级导航数量；放不下的一级导航按顺序并入“更多”菜单。
 - 只有在手机级宽度下才进入 full compact 模式，隐藏桌面横向导航并切换为汉堡菜单。
 - 抽屉菜单沿用当前分组语义，并根据当前路由自动展开对应分组。
+- 信息架构本身独立定义在 [Admin 顶部导航信息架构设计](/architecture/admin-navbar-information-architecture)；响应式只负责在不同宽度下投影这套结构。
 
 ## State Model
 
@@ -50,7 +51,7 @@
 
 ## Future Extension
 
-- 未来若接权限接口或组织级菜单配置，应继续以 `NAV_ITEMS` 的单一来源模式为目标，把动态数据映射到当前导航结构，而不是并行维护第二套抽屉配置。
+- 未来若接权限接口或组织级菜单配置，应继续以 `BASE_NAV_ITEMS` 的单一来源模式为目标，把动态数据映射到当前导航结构，而不是并行维护第二套抽屉配置。
 - 若后续需要更细的断点治理，可把 compact 计算提升为全局 layout capability，而不是散落在页面组件中。
 
 ## Residual Risks

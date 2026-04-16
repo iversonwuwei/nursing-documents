@@ -4,12 +4,12 @@
 
 - Entry route: src/app/staff/schedule/page.tsx
 - Affected users: 排班主管、值班管理、护理团队协调用户
-- Rollout stage: 第六批设备与组织扩展路由治理说明
+- Rollout stage: 第十九批物资、房间与员工页面主区收口
 
 ## User Impact
 
 - 排班管理页承担周视图排班、班次密度摘要和 AI 调整建议的统一入口。
-- 当前交付单元先固定说明与验证门禁，不改现有周切换、排班网格和 AI 建议行为。
+- 主工作区优先保留周视图总览、排班矩阵和每日汇总，把 AI 摘要、live 只读边界和帮助入口后置到信息轨。
 - 保持班次调整仍由人工发布和确认，AI 只提供密度与风险解释。
 
 ## Data Source
@@ -23,7 +23,7 @@
 - Loading state: 当前为本地同步 mock；后续接真实排班系统时需补周切换与发布反馈。
 - Empty state: 当前静态样本非空；若未来某周无排班数据，应保持网格级空态而不是只剩空白。
 - Error state: KPI、排班网格和 AI 调整建议口径不一致时需局部暴露。
-- Mobile impact: 周视图网格列多，后续改动需验证横向滚动和发布/导出 CTA 可达性。
+- Mobile impact: 周视图网格列多，后续改动需验证横向滚动、信息轨堆叠和发布/导出 CTA 可达性。
 
 ## Health Signals
 
@@ -35,7 +35,7 @@
 
 - Minimum gate: npm run lint
 - Stronger gate for behavior changes: npm run lint and npm run build
-- Manual path: 验证周切换、排班网格、日统计和 AI 链路
+- Manual path: 验证周切换、排班网格、日统计、帮助入口和 AI 链路
 
 ## Rollback
 

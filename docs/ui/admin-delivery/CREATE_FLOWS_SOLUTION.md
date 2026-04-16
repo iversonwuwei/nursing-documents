@@ -55,6 +55,7 @@
 ## Health Signals
 
 - Healthy signal: 新建后能回到对应列表，看到同一对象、对应生命周期标签和人工确认入口。
+- Healthy signal: 新建或导入页主区优先保留表单与提交动作，边界说明和帮助入口后置后，仍不影响回流闭环表达。
 - Failure signal: 表单提交后对象丢失、统计口径未更新、详情页接不住新对象，或 shared store 触发无限更新。
 - Observable signal: 列表提示卡、生命周期标签、稳定快照 smoke 断言、以及 build 可复现路由输出。
 

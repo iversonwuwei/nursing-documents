@@ -97,6 +97,15 @@ flowchart TB
 - compose 运行基础设施
 - 或在 k8s dev overlay 中使用临时依赖
 
+本地 compose 入口约定:
+
+- backend 根目录提供 `docker-compose-infras.yml` 作为开发入口，统一拉起 PostgreSQL、Redis、RabbitMQ、Keycloak、Seq。
+- 该入口继续复用 `deploy/postgres/init/01-create-service-databases.sh`，确保本地仍按服务独立数据库启动，而不是回退到共享数据库。
+- 本地服务默认端口需与当前 launchSettings 基线保持一致: gateway `5200`、family-bff `5274`、nani-bff `5213`、admin-bff `5146`、identity `5265`、tenant `5186`、elder `5062`、care `5019`、health `5197`、visit `5050`、notification `5144`、operations `5211`、billing `5253`、config `5290`、ai-orchestration `5267`。
+- 本地 RabbitMQ 凭据也需要与 compose 基线保持一致，当前开发入口默认账号为 `nursing` / `nursing`；worker 和运维工具若仍保留 `guest` / `guest` 会在 broker 健康时仍因认证失败退出。
+- 若 BFF、Gateway 或 outbox dispatcher 仍保留旧的 `5301`、`5302`、`5310`、`5311`、`5312`、`5317` 回退值，本地启动虽然通过健康检查，但跨服务调用会在运行时产生 `502`，因此需要与 launchSettings 一起同步维护。
+- 回滚方式保持简单: 若根目录入口需要撤回，仅回退该文件与 README 说明，不影响 `deploy/compose.infrastructure.yml` 和 k8s 资产。
+
 ## Cloud-Native Principles For This Backend
 
 ### Config And Secret Separation

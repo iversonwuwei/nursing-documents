@@ -4,12 +4,14 @@
 
 - Entry route: src/app/rooms/new/page.tsx
 - Affected users: 前台入住协调、床位运营、保洁主管与机构协同用户
-- Rollout stage: 主数据新建闭环第一批扩展路由
+- Rollout stage: 第十九批物资、房间与员工页面主区收口
 
 ## User Impact
 
 - 新增房间页现在承接房间编号、机构归属、房型、床位和设施录入，并在提交后进入待启用闭环。
 - 房间列表页可对新建房间执行人工启用，再决定是否加入可入住资源池。
+- 主区只保留主数据录入和提交动作，完整流程说明与帮助入口后置到信息轨。
+- 当前机构覆盖范围、启用边界与帮助说明统一后置到信息轨，不再与表单字段混排。
 - 保持排房仍由人工决策，启用动作只改变房间资源可见性，不自动分配入住对象。
 
 ## Data Source
@@ -35,7 +37,7 @@
 
 - Minimum gate: npm run lint
 - Stronger gate for behavior changes: npm run lint and npm run build
-- Manual path: 验证房间录入、跳转列表、待启用提示和启用动作
+- Manual path: 验证房间录入、跳转列表、待启用提示、帮助入口和启用动作
 
 ## Rollback
 

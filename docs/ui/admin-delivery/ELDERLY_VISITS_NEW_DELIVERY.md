@@ -4,7 +4,7 @@
 
 - Entry route: src/app/elderly/visits/new/page.tsx
 - Affected users: 前台、护理主管、家属沟通协同人员
-- Rollout stage: 第十六批剩余新建能力补齐
+- Rollout stage: 探视预约新建页主区收口与帮助后置批次
 
 ## User Impact
 
@@ -12,6 +12,7 @@
 - 新预约提交后先进入待审核，再由探视列表页执行审核通过。
 - admin 新建预约继续作为前台手工录入入口存在，但它现在要和 family 端回流到同一待审核队列共用状态口径。
 - 首批仍不接真实家属端排班系统，但 mock 结构需允许区分 admin 手工录入与 family 回流预约来源。
+- 主区只保留预约闭环说明和表单录入，完整说明与操作边界后置到信息轨和帮助入口。
 
 ## Data Source
 

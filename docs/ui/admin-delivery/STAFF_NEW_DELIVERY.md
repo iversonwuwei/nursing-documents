@@ -4,12 +4,14 @@
 
 - Entry route: src/app/staff/new/page.tsx
 - Affected users: 人力运营、护理主管、值班管理协同用户
-- Rollout stage: 第十六批剩余新建能力补齐
+- Rollout stage: 第十九批物资、房间与员工页面主区收口
 
 ## User Impact
 
 - 员工列表页的“添加员工”按钮改为真实的新建入口，而不是停留在按钮层。
 - 新员工先进入待入职状态，再由列表页执行人工确认入职。
+- 表单主区只保留录入与提交，归属说明、协同边界和帮助入口后置到信息轨。
+- 当前录入来源、第三方绑定条件和帮助说明均后置到信息轨，避免与表单字段混排。
 - 首批只做 admin demo 闭环，不接真实人事系统或排班服务。
 
 ## Data Source
@@ -29,7 +31,7 @@
 
 - Minimum gate: npm run lint
 - Stronger gate: npm run lint and npm run build
-- Manual path: 新建员工 -> 列表提示卡 -> 确认入职 -> 详情页识别新员工
+- Manual path: 新建员工 -> 列表提示卡 -> 确认入职 -> 帮助入口 -> 详情页识别新员工
 
 ## Rollback
 

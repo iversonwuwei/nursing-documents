@@ -4,12 +4,12 @@
 
 - Entry route: src/app/staff/[id]/page.tsx
 - Affected users: 人力主管、护理主管、值班管理与员工协同用户
-- Rollout stage: 第六批设备与组织扩展路由治理说明
+- Rollout stage: 第十九批物资、房间与员工页面主区收口
 
 ## User Impact
 
 - 员工详情页承担个人基本信息、排班、绩效、资质与 AI 班次摘要的合流入口。
-- 当前交付单元先固定说明与验证门禁，不改现有详情卡片、排班展示和 AI 摘要行为。
+- 主工作区优先保留人员事实、排班、绩效和资质信息，把 AI 动作摘要、交接草稿和帮助入口后置到信息轨。
 - 保持 AI 只提供班次与交接建议，不把详情页变成自动绩效结论页。
 
 ## Data Source
@@ -35,7 +35,7 @@
 
 - Minimum gate: npm run lint
 - Stronger gate for behavior changes: npm run lint and npm run build
-- Manual path: 验证员工详情、排班展示、AI 班次摘要和交接草稿链路
+- Manual path: 验证员工详情、排班展示、帮助入口、AI 班次摘要和交接草稿链路
 
 ## Rollback
 

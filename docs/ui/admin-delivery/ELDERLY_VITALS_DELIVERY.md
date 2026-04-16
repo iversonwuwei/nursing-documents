@@ -4,12 +4,12 @@
 
 - Entry route: src/app/elderly/vitals/page.tsx
 - Affected users: 生命体征录入、巡诊护士、护理主管用户
-- Rollout stage: 第十一批长者工作流子路由治理说明
+- Rollout stage: 体征记录页主区收口与帮助后置批次
 
 ## User Impact
 
 - 指标更新页当前承接生命体征记录汇总、搜索过滤和批量录入入口。
-- 当前交付单元先固定体征录入入口职责和验证门禁，不修改趋势展示或录入按钮行为。
+- 主区优先保留 KPI、筛选和体征表格，趋势解释与页面说明后置到信息轨。
 - 保持体征列表与长者详情跳转关系不变。
 
 ## Data Source
@@ -24,10 +24,11 @@
 - Empty state: 搜索后无匹配记录时应显式提示无体征记录，而不是展示空表格。
 - Error state: 顶部 KPI、趋势指示与表格数据不一致时需显式暴露。
 - Mobile impact: KPI 栅格、筛选栏和长表格在窄屏下需要验证横向滚动和可读性。
+- Help state: 通过后置信息轨查看趋势判读边界和帮助入口，不再把解释型文案堆回表格主区。
 
 ## Health Signals
 
-- Healthy signal: 体征记录页稳定展示当日录入情况，趋势指示与表格数据口径一致。
+- Healthy signal: 体征记录页稳定展示当日录入情况，趋势指示、右轨摘要和表格数据口径一致。
 - Failure signal: 搜索、趋势图标和明细记录错位，或详情跳转对象错误。
 - Verification proxy: lint 通过；行为改动时加 build 与体征录入流人工回归。
 

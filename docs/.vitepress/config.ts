@@ -28,9 +28,12 @@ export default defineConfig({
         text: '需求',
         items: [
           { text: '项目概览', link: '/requirements/project-overview' },
+          { text: 'Admin 交互静态分栏原则', link: '/requirements/admin-interaction-static-layout' },
+          { text: 'Admin SaaS 业务模块订阅', link: '/requirements/admin-saas-billable-modules' },
           { text: '长者管理', link: '/requirements/elderly-management' },
           { text: '健康监测', link: '/requirements/health-monitoring' },
           { text: '报警与事件', link: '/requirements/alerts-incidents' },
+          { text: '报警财务通知补齐', link: '/requirements/admin-alert-finance-notification-gap-closure' },
           { text: '员工协同', link: '/requirements/staff-collaboration' },
           { text: '机构管理', link: '/requirements/organization-management' },
           { text: '房间与床位', link: '/requirements/room-management' },
@@ -43,6 +46,9 @@ export default defineConfig({
         text: '架构',
         items: [
           { text: '系统概览', link: '/architecture/system-overview' },
+          { text: 'Admin 交互静态分栏布局设计', link: '/architecture/admin-interaction-static-layout' },
+          { text: 'Admin SaaS 业务模块架构设计', link: '/architecture/admin-saas-billable-modules' },
+          { text: '报警财务通知服务设计', link: '/architecture/admin-alert-finance-notification-service-design' },
         ],
       },
       {
@@ -64,9 +70,11 @@ export default defineConfig({
         text: 'API',
         items: [
           { text: '核心模块草案', link: '/api/core-modules' },
+          { text: 'Admin SaaS 业务模块契约', link: '/api/admin-saas-module-entitlement-contracts' },
           { text: '长者管理 API', link: '/api/elderly-management' },
           { text: '健康监测 API', link: '/api/health-monitoring' },
           { text: '报警与事件 API', link: '/api/alerts-incidents' },
+          { text: '报警财务通知服务契约', link: '/api/admin-alert-finance-notification-service-contracts' },
           { text: '员工协同 API', link: '/api/staff-collaboration' },
           { text: '机构管理 API', link: '/api/organization-management' },
           { text: '房间与床位 API', link: '/api/room-management' },

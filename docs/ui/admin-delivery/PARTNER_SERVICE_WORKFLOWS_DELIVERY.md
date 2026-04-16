@@ -7,14 +7,16 @@
   - `src/app/organizations/partners/new/page.tsx`
   - `src/app/nursing/[module]/page.tsx`
 - Affected users: 规则配置专员、评估主管、机构运营、协同机构管理人员
-- Rollout stage: 评定机构模型纠偏后的机构与配置治理扩展
+- Rollout stage: 定点机构协同页 Fluent 收口与帮助承接批次
 
 ## User Impact
 
-- 定点机构继续区分评估机构和护理服务机构，但在当前产品模型中，评估机构是主协同对象。
+- 定点机构继续区分评估机构和护理服务机构，但协同页首屏会先展示场景化总览和对象池，再把协同边界与帮助入口后置。
+- `/organizations/partners/new` 主区只保留定点机构录入闭环和主数据表单，机构边界与页面帮助后置到信息轨。
 - `/nursing/packages` 不再作为服务包配置，而是承接护理项库与评定规则集。
 - `/nursing/plans` 不再作为服务计划，而是承接认定方案模板。
 - 页面配置的输出会直接被 `/elderly/checkin` 和 `/financial` 消费。
+- `/organizations/partners` 需要显式帮助页承接评估机构/护理服务机构的角色边界，不再把整套说明塞在对象卡片后面。
 
 ## Workflow Design
 
@@ -48,7 +50,8 @@
 
 - Healthy signal: 护理项、规则集和模板能独立治理，并能被个案页命中。
 - Healthy signal: 评估机构启用后能进入协同视图，不与护理服务机构选择冲突。
-- Failure signal: `/nursing/packages` 仍显示服务套餐心智，或 `/nursing/plans` 仍显示服务计划心智。
+- Healthy signal: `/organizations/partners` 在 institutional/home 场景下都能先呈现场景化总览，再展开对象协同细节。
+- Failure signal: `/nursing/packages` 仍显示服务套餐心智，`/nursing/plans` 仍显示服务计划心智，或协同页重新堆回长说明首屏。
 
 ## Verification
 
@@ -59,6 +62,7 @@
   - 在 `/nursing/packages` 创建护理项和规则集
   - 在 `/nursing/plans` 创建认定模板
   - 在 `/elderly/checkin` 查看个案命中的规则集和模板
+  - 在 `/organizations/partners` 的 institutional/home 两个场景下检查对象池、展开详情和帮助入口
 
 ## Rollback
 

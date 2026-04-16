@@ -4,12 +4,13 @@
 
 - Entry route: src/app/elderly/visits/page.tsx
 - Affected users: 前台接待、家属沟通、探视审核用户
-- Rollout stage: Family 预约探视回流到 admin 审核闭环的首批治理扩展
+- Rollout stage: 探视审核页主区收口与帮助后置批次
 
 ## User Impact
 
 - 探视记录页不再只承接 admin 端手工新建预约，也需要承接 family 端家属预约回流后的待审核队列。
 - 审核用户需要在同一页看到预约来源、是否命中 AI 风险、是否已经在家属端自动通过，以及哪些预约仍需人工放行或驳回。
+- 主区优先保留待审核对象、审核动作和探视列表，AI 探视建议与页面说明后置到信息轨。
 - 保持探视记录、AI 探视建议和审核动作在同一页面联动展示，但把“待审核入口”升级为真正的审核工作台而不是只有一个通过按钮。
 
 ## Data Source
@@ -24,6 +25,7 @@
 - Empty state: 搜索后无匹配探视记录时显式提示无结果；若当前没有待审核预约，也要明确显示“待审核队列为空”。
 - Error state: 待审核统计、family 回流来源、AI 风险摘要和列表状态不一致时需显式暴露。
 - Mobile impact: 待审核摘要卡、family 来源 banner、审核动作和探视表格在窄屏下需要维持清晰顺序和可点击性。
+- Help state: 通过后置信息轨查看审核边界、AI 建议和帮助入口，不再把长说明压缩主区。
 
 ## Health Signals
 
