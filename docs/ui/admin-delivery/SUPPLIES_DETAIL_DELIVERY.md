@@ -14,15 +14,15 @@
 
 ## Data Source
 
-- Route type: client detail route with params-based local mock lookup
-- Primary sources: local supply detail mock and AI supply detail/procurement helpers
+- Route type: client detail route with params-based live fetch
+- Primary sources: Admin supply detail API and backend AI resource-insights
 - Downstream links: AI assistant context links for补货缺口 and 采购跟进
 
 ## UI States
 
-- Loading state: 当前为本地同步对象；对象切换时详情骨架保持稳定。
+- Loading state: 对象切换或首屏详情拉取时保持显式加载反馈。
 - Empty state: 未命中对象时需显式 not found，而不是继续回退默认物资。
-- Error state: 库存概览、进出库记录与 AI 建议口径不一致时需局部暴露。
+- Error state: 库存概览、进出库记录与 AI 建议口径不一致时需局部暴露，也不回退默认物资对象。
 - Mobile impact: 详情页保持对象总览、台账、后置上下文的单列顺序，不恢复多卡并排。
 
 ## Health Signals
@@ -39,5 +39,5 @@
 
 ## Rollback
 
-- Revert this delivery note and any future supplies detail route changes together.
+- Revert this delivery note together with supplies detail route、Next proxy、Admin BFF 和 operations supplies detail endpoint。
 - If regressions appear, fallback is the previous local supply detail composition and AI summary wording.

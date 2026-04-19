@@ -5,9 +5,9 @@
 - scope: 把 `/organizations/[id]` 收口成“机构对象事实 + 床位/员工台账 + 后置运营上下文”的 Fluent 详情页，不再让对象事实、AI 摘要和说明块并排争抢注意力。
 - affected users: 机构运营、床位协调、院长、人力协同用户。
 - changed behavior: 页面仍保留机构概览、床位管理、员工管理三段，但主区先承接对象状态和当前 tab，AI 摘要、治理边界和帮助入口后置。
-- dependent systems: `master-data-workflow`、机构员工派生数据、AI context links、机构管理帮助页。
+- dependent systems: organization service、rooms 聚合、AI context links、机构管理帮助页。
 - verification: `npm run docs:build`、admin `npm run lint` 与 `npm run build`；手工检查机构概览、床位和员工切换。
-- rollback: 回退页面编排与本文件，不改对象数据源和现有 tab 逻辑。
+- rollback: 回退页面编排与本文件，并与 organization live 详情链路一起回滚。
 
 ## 页面目标
 
@@ -22,16 +22,16 @@
 
 ## 数据来源
 
-- 机构对象：`master-data-workflow`
-- 床位派生数据：机构关联房间与床位快照
-- 员工派生数据：机构员工名册
-- AI 摘要：organization detail / bed / staff mock AI helpers
+- 机构对象：organization service
+- 床位派生数据：Admin BFF 聚合 rooms 真实台账
+- 员工数据：当前为真实空态与接入边界，不再回退本地员工名册
+- AI 摘要：页面基于真实机构与房间聚合数据本地派生
 
 ## 状态设计
 
-- 加载态: 当前为本地同步对象；对象切换时保持详情骨架可读。
+- 加载态: 详情页按真实接口加载对象；对象切换时保持详情骨架可读。
 - 空态: 未命中机构时，页面需显式提示对象不存在，而不是静默回退到第一条机构。
-- 错误态: 对象事实、床位台账与员工台账口径不一致时需在当前 tab 附近显式暴露。
+- 错误态: 对象事实、rooms 聚合与员工接入边界不一致时需在当前 tab 附近显式暴露。
 - Mobile impact: tab、KPI、台账和后置上下文继续保持单列顺序，不恢复桌面并排概览侧栏。
 
 ## 关键动作

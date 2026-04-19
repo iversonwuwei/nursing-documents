@@ -8,36 +8,36 @@
 
 ## User Impact
 
-- 提醒中心承担共享 workflow store 派生提醒、筛选、备注保存、升级处理和已读处理的统一入口。
-- 当前交付单元先固定说明与验证门禁，不修改提醒筛选、备注保存和升级处理行为。
-- 保持该页仍停留在本地共享 store 范围，不引入真实消息系统或发送通道契约。
+- 通知中心只展示真实 Notification Service 摘要、发送队列和失败待处置消息，不再回退共享 workflow store 提醒闭环。
+- 当前交付单元把页面收敛为 live-only 读视图；未接通的备注保存、已读、升级处理不再由前端本地 store 伪造。
+- 当真实通知服务不可用时，页面保留错误状态和空态，不再继续展示 demo 通知或本地提醒队列。
 
 ## Data Source
 
-- Route type: client page with local filters plus useSyncExternalStore subscription
-- Primary sources: admission-workflow store, derived reminder items, and local reminder mutation helpers
-- Downstream dependencies: reminder audit note persistence and local status transitions
+- Route type: client page with live Notification Service snapshot only
+- Primary sources: `/api/content/notifications/summary` and `/api/content/notifications/queue`
+- Downstream dependencies: Notification Service queue status, category breakdown, and live empty/error states
 
 ## UI States
 
-- Loading state: 当前依赖本地共享 store，同步渲染；若未来接真实提醒系统需补列表和保存反馈。
-- Empty state: 搜索或状态筛选无提醒时应保持列表级空态。
-- Error state: 提醒统计、提醒状态和备注/升级保存结果不一致时需局部暴露。
-- Mobile impact: 筛选条、提醒卡片、备注输入和状态动作并存，后续改动需验证窄屏编辑与 CTA 可达性。
+- Loading state: 首屏读取真实通知摘要与消息队列时显示同步文案。
+- Empty state: 真实队列为空时显示 live empty，不再回退本地提醒。
+- Error state: Notification Service 不可用时应显式暴露 unavailable 状态，而不是继续渲染 demo 通知。
+- Mobile impact: 队列筛选、消息卡片和失败待处置区需验证窄屏下滚动与 CTA 可达性。
 
 ## Health Signals
 
-- Healthy signal: 提醒统计、筛选结果、状态推进和备注保存围绕同一 reminder 数据集保持一致。
-- Failure signal: 状态推进与统计错位，或本地消息原型越过真实消息系统边界做出不可回退承诺。
+- Healthy signal: 通知摘要、实时队列、失败待处置和通道计数围绕同一真实消息数据集保持一致。
+- Failure signal: 页面在真实服务失败时回退 demo 数据，或 live 队列与摘要计数口径不一致。
 - Verification proxy: lint 通过；行为改动时加 build 与提醒中心人工回归。
 
 ## Verification
 
 - Minimum gate: npm run lint
 - Stronger gate for behavior changes: npm run lint and npm run build
-- Manual path: 验证搜索、状态筛选、备注保存、升级处理和已读/处理链路
+- Manual path: 验证 live 摘要、live 队列、失败待处置、搜索/状态筛选与真实空态/错误态
 
 ## Rollback
 
 - Revert this delivery note and any future notifications route changes together.
-- If regressions appear, fallback is the previous local reminder feed, filter logic, and status mutation behavior.
+- If regressions appear, rollback should restore the previous notifications route implementation; do not reintroduce local reminder feed as a long-term source of truth.

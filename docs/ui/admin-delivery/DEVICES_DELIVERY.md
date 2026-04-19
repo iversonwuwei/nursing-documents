@@ -8,14 +8,14 @@
 
 ## User Impact
 
-- 设备总览路由当前直接复用 equipment 路由内容，承担设备入口兼容和导航承接职责。
-- 当前交付单元先固定说明和验证门禁，不修改 re-export 结构或设备展示行为。
-- 保持 `/devices` 与 `/equipment` 入口在当前原型阶段指向同一设备总览视图。
+- 设备总览路由继续直接复用 equipment 路由内容，承担设备入口兼容和导航承接职责。
+- 这轮不拆分 re-export 结构，但 `/devices` 会继承 `/equipment` 的 live read-write 行为。
+- 保持 `/devices` 与 `/equipment` 入口继续指向同一设备总览视图。
 
 ## Data Source
 
 - Route type: route re-export to equipment page
-- Primary dependency: src/app/equipment/page.tsx
+- Primary dependency: src/app/equipment/page.tsx live equipment APIs
 - Downstream links: device detail, realtime monitor, and AI assistant context links inherited from equipment view
 
 ## UI States
@@ -39,5 +39,5 @@
 
 ## Rollback
 
-- Revert this delivery note and any future devices route changes together.
+- Revert this delivery note together with devices compatibility routes and the shared equipment live integration。
 - If regressions appear, fallback is the previous re-export wiring to equipment page.

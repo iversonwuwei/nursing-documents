@@ -4,7 +4,7 @@
 
 - Entry route: src/app/supplies/new/page.tsx
 - Affected users: 采购、仓储、后勤主管
-- Rollout stage: 第十九批物资、房间与员工页面主区收口
+- Rollout stage: supplies family live read-write 收口中的采购入库入口
 
 ## User Impact
 
@@ -17,7 +17,7 @@
 ## Data Source
 
 - Route type: client form page
-- Primary sink: resource workflow shared store
+- Primary sink: Admin supplies intake API
 - Downstream link: `/supplies?selected=...&entry=supplies-new`
 
 ## UI States
@@ -35,5 +35,5 @@
 
 ## Rollback
 
-- Revert this note together with `/supplies/new` and resource workflow supplies changes.
-- Fallback is to restore the previous static supplies list-only behavior.
+- Revert this note together with `/supplies/new`、Next proxy、Admin BFF 和 operations supplies intake endpoint。
+- Fallback is to restore the previous local intake behavior.

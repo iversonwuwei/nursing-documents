@@ -4,7 +4,7 @@
 
 - Entry route: src/app/rooms/[id]/page.tsx
 - Affected users: 前台入住协调、床位运营、护理主管与机构协同用户
-- Rollout stage: 第十九批物资、房间与员工页面主区收口
+- Rollout stage: rooms live vertical slice
 
 ## User Impact
 
@@ -15,21 +15,21 @@
 
 ## Data Source
 
-- Route type: client detail route with params-based merged lookup and shared workflow subscription
-- Primary sources: master-data-workflow merged room detail and AI room detail/care helpers
+- Route type: client detail route with params-based live fetch
+- Primary sources: Next `/api/rooms/{id}` -> Admin BFF `/api/admin/rooms/{id}` -> Rooms service + elder aggregation
 - Downstream links: elderly detail links and AI assistant context links
 
 ## UI States
 
-- Loading state: 当前为本地同步 mock；后续接真实房间详情接口时需补对象切换反馈。
-- Empty state: 当前未知 id 回退默认房间；若接真实数据需显式 not found 策略。
-- Error state: 房间概览、床位占用与 AI 建议口径不一致时需局部暴露。
+- Loading state: 详情页在切换房间时展示 live loading。
+- Empty state: 未找到房间时显式 not found/empty，不回退默认房间。
+- Error state: 房间概览、床位占用与入住对象聚合失败时需显式暴露。
 - Mobile impact: 床位卡片、房间信息和设施标签并存，后续改动需验证窄屏堆叠与 CTA 可达性。
 
 ## Health Signals
 
 - Healthy signal: 房间概览、待启用状态、床位占用、对象链接和 AI 建议围绕同一房间对象保持一致。
-- Failure signal: 房间对象映射错误、床位占用错位，或新建房间详情被回退到错误默认对象。
+- Failure signal: 房间对象映射错误、床位占用错位，或 live 详情页重新回退到前端默认对象。
 - Verification proxy: lint 通过；行为改动时加 build 与房间详情人工回归。
 
 ## Verification
@@ -41,4 +41,4 @@
 ## Rollback
 
 - Revert this delivery note and any future rooms detail route changes together.
-- If regressions appear, fallback is the previous local room detail composition and AI summary wording.
+- If regressions appear, rollback the live detail route together; do not keep mixed live/mock room detail composition.

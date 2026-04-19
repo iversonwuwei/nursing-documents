@@ -4,7 +4,7 @@
 
 - Entry route: src/app/activities/[id]/page.tsx
 - Affected users: 活动运营、前台协同、护理主管
-- Rollout stage: 第十七批分析与详情页主区收口
+- Rollout stage: activities family live detail read/write 收口
 
 ## User Impact
 
@@ -14,15 +14,15 @@
 
 ## Data Source
 
-- Route type: client detail route with dynamic route param and shared workflow subscription
-- Primary data: shared operations workflow live activity records keyed by id
+- Route type: client detail route with dynamic route param and live API fetch
+- Primary data: Admin activities detail and publish action APIs
 - Upstream links: activities list route and activities new route
 
 ## UI States
 
-- Loading state: 当前为本地同步 workflow store，后续接远程详情接口时需补拉取反馈与 skeleton。
-- Empty state: 当前未知 id 会回退到首条记录；接真实接口时需显式区分 not found 与空态。
-- Error state: 动态 id、待发布状态和详情字段若不一致，需局部暴露，不应静默掩盖。
+- Loading state: 详情拉取期间需保持显式加载反馈。
+- Empty state: 未命中活动 id 时显示 not found，不再回退首条活动样例。
+- Error state: 动态 id、待发布状态和详情字段若不一致，需局部暴露，不应静默掩盖或回落本地默认值。
 - Mobile impact: 详情页头、状态卡、统计卡、对象事实卡和帮助入口在窄屏下仍需保持主操作可见。
 
 ## Health Signals
@@ -39,5 +39,5 @@
 
 ## Rollback
 
-- Revert this delivery note together with activities detail route and shared operations workflow 接入。
+- Revert this delivery note together with activities detail route、Next proxy、Admin BFF 和 operations detail/publish endpoints。
 - If regressions appear, fallback is the previous local detail mock and list-to-detail link behavior.

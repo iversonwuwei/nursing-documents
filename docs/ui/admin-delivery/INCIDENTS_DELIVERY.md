@@ -4,7 +4,7 @@
 
 - Entry route: src/app/incidents/page.tsx
 - Affected users: 质控、运营、值班管理与事故复盘用户
-- Rollout stage: 第十六批事故工作台主区收口与帮助页后置
+- Rollout stage: incidents family live read-write 收口，切换到 Admin Web -> Next proxy -> Admin BFF -> Operations Service
 
 ## User Impact
 
@@ -15,16 +15,16 @@
 
 ## Data Source
 
-- Route type: client page with local search/filter state and shared workflow subscription
-- Primary data: shared operations workflow mock store plus admin AI helpers
+- Route type: client page with local search/filter state and live API read model
+- Primary data: Admin incidents list and status action APIs；AI 摘要改为后端 AI incident-analysis
 - Upstream link: incidents new route
 - Downstream links: incident detail pages, help route and AI assistant contextual links
 
 ## UI States
 
-- Loading state: 当前为本地 workflow store，后续接真实事故流需补搜索、筛选和待分派推进中的可见反馈。
-- Empty state: 搜索或筛选无结果时保持 EmptyState 搜索空态。
-- Error state: 事故列表、待分派提示卡、状态统计、优先队列和右轨 AI 摘要不一致时应局部暴露，不能整页静默。
+- Loading state: 列表和 AI 摘要首屏请求期间需保持显式加载反馈，不默认显示本地事故样例。
+- Empty state: 搜索或筛选无结果时保持 EmptyState 搜索空态；live 返回空列表时保持真实空态。
+- Error state: 事故列表、待分派提示卡、状态统计、优先队列和右轨 AI 摘要不一致时应局部暴露，不能整页静默，也不回退本地 workflow。
 - Mobile impact: 列表卡片、待分派提示卡、右轨 AI 区块和帮助入口并存，需确认窄屏滚动顺序与点击区域。
 
 ## Health Signals
@@ -41,5 +41,5 @@
 
 ## Rollback
 
-- Revert this delivery note together with incidents list route, help route and shared operations workflow 接入。
-- If later changes regress, fallback is the previous static incidents list and local search/filter implementation.
+- Revert this delivery note together with incidents list route、Next proxy、Admin BFF、incident-analysis 接入和 operations incidents endpoints。
+- If later changes regress, fallback is the previous local operations-workflow and mock AI implementation.

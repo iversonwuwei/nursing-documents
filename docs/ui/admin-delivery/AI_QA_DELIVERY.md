@@ -15,19 +15,19 @@
 ## Data Source
 
 - Route type: client AI Q&A page with query-context propagation
-- Primary sources: AI tracking context helpers, admission workflow external store, `sendAdminAiChat`, demo fallback `getAdminAiPromptReply`
+- Primary sources: AI tracking context helpers, `/api/dashboard/overview`, `sendAdminAiChat`
 - Downstream dependencies: `/api/ai/*` Next proxy, Admin BFF AI chat route, `AdminAiNav`
 
 ## UI States
 
 - Loading state: 提交问题后按钮进入生成中状态，避免重复触发。
 - Empty state: 无上下文时退化为通用问答页；未发起第一轮对话前显示占位回答。
-- Error state: AI 模块未启用、链路失败或服务不可用时需显式展示错误，不静默回退到无提示状态。
+- Error state: AI 模块未启用、链路失败或服务不可用时需显式展示错误，不静默回退到 mock 回答。
 - Mobile impact: 预设问题、输入区和回答区保持单列顺序，右侧仅保留上下文和链路状态。
 
 ## Health Signals
 
-- Healthy signal: 问答页稳定展示预设问题、自定义输入和回答结果，并保留来源上下文。
+- Healthy signal: 问答页稳定展示预设问题、自定义输入和真实回答结果，并保留来源上下文。
 - Failure signal: 问答逻辑重新回流到 AI 根页，或问答页开始承载与回答无关的总览/审计内容。
 - Verification proxy: lint 通过；行为改动时加 build 与问答页人工回归。
 

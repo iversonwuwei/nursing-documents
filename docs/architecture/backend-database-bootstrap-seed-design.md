@@ -4,7 +4,7 @@
 
 - scope: 设计本地 backend 的数据库初始化、跨服务测试数据入库和 API 联调验证方案。
 - boundaries: 仅覆盖本地 PostgreSQL、多服务 DbContext、Operations alert 持久化与 deterministic seed；不扩展到生产发布编排。
-- dependencies: DatabaseMigrator、PostgreSQL service databases、各领域服务实体与 BFF 读路径。
+- dependencies: DatabaseMigrator、DatabaseSeeder、PostgreSQL service databases、各领域服务实体与 BFF 读路径。
 - rollback: 回退本文与对应实现，重建本地数据库，恢复到当前 demo 或内存模式。
 
 ## Entry Points
@@ -41,6 +41,15 @@
 - billing: `nursing_billing`
 - notification: `nursing_notification`
 - operations: 新增 `nursing_operations`
+- organization: `nursing_organizations`
+- rooms: `nursing_rooms`
+- staffing: `nursing_staffing`
+
+### Database Bootstrap Behavior
+
+- compose init 脚本仍负责首次初始化时批量创建 service databases。
+- DatabaseMigrator 也必须具备“补建缺失 database”能力，避免开发者复用旧 Postgres volume 时因为新增服务数据库不存在而联调失败。
+- migrator 的补建逻辑只处理本地开发场景下的 service database existence，不改变各服务 migration 的 ownership。
 
 ### Operations Alert Persistence
 
@@ -67,6 +76,9 @@
 | 服务 | 关键数据 | 目标用途 |
 | --- | --- | --- |
 | Elder | 3 到 5 个老人档案与 admission | 支撑 admin 列表、family summary、care 与 billing 关联 |
+| Organization | 2 到 3 个机构主档 | 支撑 admin organizations 列表、详情与 rooms/staffing 归属 |
+| Rooms | 与 elder 房号匹配的房间主档 + 少量空房 | 支撑 admin rooms 列表、详情与 organization capacity 聚合 |
+| Staffing | 机构内自有员工 + 第三方员工样本 | 支撑 admin staff 列表与 organization detail 员工 tab |
 | Health | 每位老人的健康档案摘要 | 支撑 family 或 admin 健康聚合 |
 | Care | 护理计划、任务、排班、审计 | 支撑 admin workflow、nani task feed |
 | Visit | 预约申请与状态样本 | 支撑 family 或 admin 探视聚合 |
@@ -77,8 +89,13 @@
 ### Seed Identity Rules
 
 - 使用固定 tenantId，例如 `tenant-demo`。
+- 本地联调若通过 Identity Service `dev-login` 发行 bearer token，token 里的 `tenantId` 也必须复用 `tenant-demo`；`ORG-PD-01` 这类 organizationId 只能作为业务主键参与聚合，不能替代租户标识。
 - elderId、visitId、invoiceId、notificationId、alertId 使用稳定值，而不是时间戳。
+- organizationId、roomId、staffId 同样使用稳定值，避免前端反复联调时 selector 和详情链接漂移。
 - 跨服务关联统一复用固定 elderId 与 sourceEntityId，确保 BFF 聚合能够命中。
+- rooms seed 必须与 elder seed 的 `RoomNumber` 对齐，否则 admin BFF occupant 聚合会错误显示为空床。
+- admin BFF 读取 elder 列表做 occupant 聚合时，入住状态过滤必须沿用 Elder API 契约里的 `Active`，而不是前端展示态 `已入住`。
+- staffing seed 必须包含 `organizationId` 与 `organizationName` 双字段，覆盖 BFF 按 id 和按名称的兼容匹配路径。
 
 ## Verification Design
 
@@ -90,8 +107,10 @@
   3. 查询或日志确认各服务写入数量
 - integration gate:
   1. admin `/alerts`、`/financial`、`/notifications` 显示 `Live API`
-  2. backend 关键 API 返回非空样本
-  3. 至少一条 family 或 nani 聚合接口返回真实数据
+  2. admin `/organizations`、`/rooms`、`/staff` 显示 `Live API` 且返回非空样本
+  3. admin `/api/admin/organizations/{organizationId}` 返回 rooms 与 staff 聚合结果，且 occupiedBeds 与 room occupants 能命中 `status=Active` 的 elder 样本
+  4. backend 关键 API 返回非空样本
+  5. 至少一条 family 或 nani 聚合接口返回真实数据
 
 ## Observability
 

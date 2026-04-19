@@ -4,32 +4,33 @@
 
 - Entry route: `src/app/financial/page.tsx`
 - Affected users: 财务结算人员、评估主管、质控复核人员
-- Rollout stage: 评定机构模型纠偏后的结算与质控页升级
+- Rollout stage: 评定机构模型纠偏后的结算与质控页 live read-only 收口
 
 ## User Impact
 
 - 财务页不再展示护理服务结算，而是承接评定服务结算与质控工作台。
-- 页面围绕评定案件、资料完整性、人工调整、质控风险和评估费结算进度组织信息。
-- 页面可见个案对应的规则集和模板上下文，避免结算与认定脱节。
+- 页面主视图只保留真实 Billing 摘要、账单队列、通知状态和票据风险，不再回退到前端评定结算单。
+- 页面在链路异常时保留显式 live 错误态与空态，而不是静默切回本地 demo workflow。
+- 页面当前阶段是 live read-only；若后续恢复真实开票动作，应以 Billing 后端能力为前提，而不是重新挂回前端 assessment store。
 
 ## Data Source
 
-- Primary source: `assessment-workflow` 共享个案 store 派生出的结算单
-- Supporting source: `assessment-config-workflow` 提供规则集和模板上下文
-- Contract note: 待认定确认的个案不会提前进入结算视图
+- Primary source: `src/lib/services/admin-module-services.ts` 读取的 Billing 摘要与账单队列
+- Supporting source: `src/lib/ai/admin-ai-api.ts` 提供只读稽核入口链接，不参与账单事实源
+- Contract note: 前端不再以 `assessment-workflow` 或 `assessment-config-workflow` 作为财务页事实源
 
 ## UI States
 
-- Loading state: 当前为本地 mock，后续接真实结算接口时补批次加载与提交反馈。
-- Empty state: 若没有已进入结算阶段的案件，页面需提示先完成个案认定。
-- Error state: 资料缺失、人工调整无依据、规则或模板缺失时，应在页面上可见。
+- Loading state: 首屏等待 Billing 摘要与账单队列返回时，页面显示明确同步态。
+- Empty state: 若真实 Billing 暂无账单，页面需展示 live 空态，不混入本地结算单。
+- Error state: Billing 或通知链路不可用时，页面显示明确错误态和恢复指引，不切回 demo 结算视图。
 - Mobile impact: KPI、结算单列表和明细需验证窄屏堆叠和点击可达性。
 
 ## Health Signals
 
-- Healthy signal: 结算页只展示已进入认定闭环的案件。
-- Healthy signal: 结算页可见规则版本、模板和资料完整性状态。
-- Failure signal: 仍以“服务计划”“医保申报”“基金承担”为页面主话术，或结算单无法关联认定上下文。
+- Healthy signal: 结算页的 KPI、列表、详情与右侧状态说明全部来自真实 Billing 摘要或账单。
+- Healthy signal: 页面在 live 链路失败时停留在显式错误态，不出现 `Demo Fallback` 或 assessment 结算单。
+- Failure signal: 页面重新混入本地结算 store、assessment 派生账单或 demo 开票按钮。
 
 ## Verification
 
@@ -38,10 +39,11 @@
 - Documentation gate: `npm run docs:build`
 - Manual path:
   - 进入 `/financial`
-  - 确认标题、KPI 和列表语义已经切到评定服务结算
-  - 选中一条结算单后可见规则集或模板信息
+  - 确认标题、KPI、账单列表和详情都来自真实 Billing 数据
+  - 人为制造接口失败时，确认页面显示 live 错误态而不是 demo 回退
+  - 确认首屏不再出现评定结算单、资料门禁按钮或 demo 开票入口
 
 ## Rollback
 
 - Revert this note together with `financial/page.tsx` changes.
-- If regressions appear, fallback is the previous demo finance wording, but会恢复与评定机构模型不一致的表达。
+- If regressions appear, rollback is the previous mixed live-plus-demo financial page, but that will restore dual source-of-truth risk.

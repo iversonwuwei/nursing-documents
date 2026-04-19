@@ -4,7 +4,7 @@
 
 - Entry route: src/app/supplies/page.tsx
 - Affected users: 采购、仓储、护理站和值班管理协同用户
-- Rollout stage: 第十九批物资、房间与员工页面主区收口
+- Rollout stage: supplies family live read-write 收口，切换到 Admin Web -> Next proxy -> Admin BFF -> Operations Service
 
 ## User Impact
 
@@ -15,14 +15,14 @@
 ## Data Source
 
 - Route type: client page with local search, category filter, and pagination state
-- Primary sources: local supplies mocks and AI supply helpers
+- Primary sources: Admin supplies list/detail/intake/activate APIs and backend AI resource-insights
 - Downstream links: supply detail/inbound route and AI assistant context links
 
 ## UI States
 
-- Loading state: 当前为本地同步 mock；后续接库存系统时需补筛选和分页反馈。
-- Empty state: 搜索或分类筛选无结果时应保持搜索空态。
-- Error state: 库存统计、列表和 AI 补货摘要口径不一致时需局部暴露。
+- Loading state: 首屏等待物资列表返回时需保持显式加载反馈。
+- Empty state: 搜索或分类筛选无结果时应保持搜索空态；live 返回空集合时显示真实空态。
+- Error state: 库存统计、列表和 AI 补货摘要口径不一致时需局部暴露，并且不回退本地库存 mock。
 - Mobile impact: 物资表格列较多，后续改动需验证窄屏滚动、信息轨堆叠顺序与入库 CTA 可达性。
 
 ## Health Signals
@@ -39,5 +39,5 @@
 
 ## Rollback
 
-- Revert this delivery note and any future supplies route changes together.
+- Revert this delivery note together with supplies route、Next proxy、Admin BFF 和 operations supplies endpoints。
 - If regressions appear, fallback is the previous local supplies list, filter logic, and AI summary composition.

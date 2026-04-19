@@ -14,6 +14,15 @@
 - 先保证服务边界清晰，再决定是否进一步细分子服务。
 - 每个拥有持久化写模型的领域服务默认使用独立数据库；服务之间通过 API、事件或投影交互，而不是共用业务表。
 
+## 当前验证补强设计
+
+- scope: 为 admin live 主数据切片补一层低依赖自动化验证，不引入新测试宿主，不直接拉起真实数据库或完整 HTTP 拓扑。
+- boundaries: 仅覆盖 Organization、Rooms、Staffing、Elder 与 Admin BFF 中可稳定复用的规则层与持久化模型层；不在本轮扩散到全量集成测试框架。
+- dependencies: 复用现有 `tests/NursingBackend.ArchitectureTests` 项目，通过内部 helper 或 DbContext 元数据验证规则与模型，不新增运行时依赖。
+- failure modes: 若校验函数被静默改弱、BFF 聚合口径回退到错误匹配、或 EF 模型丢失关键索引/转换器，应由测试直接失败暴露，而不是等到页面联调阶段再发现。
+- verification: `dotnet test tests/NursingBackend.ArchitectureTests/NursingBackend.ArchitectureTests.csproj` 应覆盖主数据建档校验、组织与房间聚合、assessment 推荐规则以及关键 DbContext 模型约束。
+- rollback: 删除新增 helper 与测试即可，不改变服务边界、接口路径和数据库 ownership。
+
 ## Edge 服务
 
 ### API Gateway

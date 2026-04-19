@@ -4,7 +4,7 @@
 
 - Entry route: src/app/equipment/[id]/page.tsx
 - Affected users: 设备工程、护理协同、设备维保跟进用户
-- Rollout stage: 第十七批分析与详情页主区收口
+- Rollout stage: equipment family live detail read/write 收口
 
 ## User Impact
 
@@ -14,14 +14,14 @@
 
 ## Data Source
 
-- Route type: client detail page with route param fallback
-- Primary source: in-file DEVICE_DATA mock detail payload
-- Downstream dependencies: getEquipmentDetailAiInsight, getEquipmentMaintenanceNarratives, buildAiAssistantHref
+- Route type: client detail page with route param live fetch
+- Primary source: Admin equipment detail API
+- Downstream dependencies: backend AI device-insights and buildAiAssistantHref
 
 ## UI States
 
-- Loading state: 当前为本地静态详情，无显式加载态；后续接真实详情接口时需补参数切换反馈。
-- Empty state: 未命中设备 id 时回退到默认设备样例；后续接真实数据时应改为显式未找到状态。
+- Loading state: 动态详情拉取期间需保持显式加载反馈。
+- Empty state: 未命中设备 id 时显示显式未找到状态，不再回退默认设备样例。
 - Error state: AI 解释、维保摘要或历史指标口径不一致时应显式暴露，而不是静默展示默认值。
 - Mobile impact: 顶部操作区、实时指标卡、历史表格、对象事实区和帮助入口在窄屏下需要验证可读性。
 
@@ -39,5 +39,5 @@
 
 ## Rollback
 
-- Revert this delivery note and any future equipment detail route changes together.
-- If regressions appear, fallback is the current single-device mock detail view with fixed AI linkage.
+- Revert this delivery note together with equipment detail route、Next proxy、Admin BFF 和 operations equipment detail endpoint。
+- If regressions appear, fallback is the previous local detail view with fixed AI linkage.

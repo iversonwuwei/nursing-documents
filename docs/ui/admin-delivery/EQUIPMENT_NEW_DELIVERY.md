@@ -4,18 +4,18 @@
 
 - Entry route: src/app/equipment/new/page.tsx
 - Affected users: 设备管理员、后勤、值班护理协同用户
-- Rollout stage: 第十六批剩余新建能力补齐
+- Rollout stage: equipment family live read-write 收口中的建设备入口
 
 ## User Impact
 
 - 设备列表页的“添加设备”按钮改为真实的新建设备入口。
 - 新设备提交后先进入待验收状态，再由列表页或详情页完成验收入册。
-- 不接真实资产系统；当前只保证 admin 前端演示闭环可追踪。
+- 当前不接外部资产系统，但已改为真实持久化 operations 数据，而不是前端演示闭环。
 
 ## Data Source
 
 - Route type: client form page
-- Primary sink: resource workflow shared store
+- Primary sink: Admin equipment create API
 - Downstream link: `/equipment?selected=...&entry=equipment-new`
 
 ## UI States
@@ -33,5 +33,5 @@
 
 ## Rollback
 
-- Revert this note together with `/equipment/new` and resource workflow equipment changes.
-- Fallback is to restore the previous static equipment list-only behavior.
+- Revert this note together with `/equipment/new`、Next proxy、Admin BFF 和 operations equipment create endpoint。
+- Fallback is to restore the previous local equipment draft behavior.

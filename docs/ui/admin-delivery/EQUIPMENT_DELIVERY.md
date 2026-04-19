@@ -4,7 +4,7 @@
 
 - Entry route: src/app/equipment/page.tsx
 - Affected users: 设备运维、护理站、值班管理与后勤协同用户
-- Rollout stage: 第十七批分析与详情页主区收口
+- Rollout stage: equipment family live read-write 收口，切换到 Admin Web -> Next proxy -> Admin BFF -> Operations Service
 
 ## User Impact
 
@@ -15,14 +15,14 @@
 ## Data Source
 
 - Route type: client page with local search, category filter, and pagination state
-- Primary sources: equipmentList, equipmentAlarms, and AI equipment helpers
+- Primary sources: Admin equipment list, detail, activate APIs and backend AI device-insights
 - Downstream links: device detail, realtime monitor, and AI assistant context links
 
 ## UI States
 
-- Loading state: 当前为本地同步 mock；后续接设备实时状态时需补筛选和分页反馈。
-- Empty state: 搜索或分类筛选无结果时应保持搜索空态。
-- Error state: 设备状态、告警数量与 AI 巡检建议口径不一致时需局部暴露，并保留帮助入口。
+- Loading state: 首屏等待设备列表返回时需保持显式加载反馈。
+- Empty state: 搜索或分类筛选无结果时应保持搜索空态；live 返回空集合时显示真实空态。
+- Error state: 设备状态、激活动作与 AI 巡检建议口径不一致时需局部暴露，并保留帮助入口；不再回退 equipmentList 本地样例。
 - Mobile impact: 设备表格、优先队列、后置 AI 摘要和帮助卡在窄屏下需验证纵向堆叠与 CTA 可达性。
 
 ## Health Signals
@@ -39,5 +39,5 @@
 
 ## Rollback
 
-- Revert this delivery note and any future equipment route changes together.
+- Revert this delivery note together with equipment route、devices compatibility route、Next proxy、Admin BFF 和 operations equipment endpoints。
 - If regressions appear, fallback is the previous local equipment list, filter logic, and AI summary composition.

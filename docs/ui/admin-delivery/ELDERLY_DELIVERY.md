@@ -15,31 +15,31 @@
 
 ## Data Source
 
-- Route type: client page with local filter state + shared workflow subscriptions
-- Primary data: static elderlyList plus admission-workflow shared store merged through elderly-registry helper, and face-enrollment workflow shared store for人脸状态
+- Route type: client page with server-backed list query plus local filter state
+- Primary data: Admin BFF `/api/admin/elders` 聚合的 Elder Service 真实主档；人脸状态在本轮不再以 shared mock store 作为事实源，而是显式标记为待接通
 - Downstream links: elderly detail pages, elderly new page, elderly import page, checkin workflow entry, and face enrollment workflow entry
-- Visual scope: Microsoft Fluent 2 inspired page-level restyle only; no contract or store changes introduced
+- Dependent systems: Admin Next route proxy, Admin BFF, Elder Service, 本地 PostgreSQL seed 数据
 
 ## UI States
 
-- Loading state: 当前为本地数据加共享 store，后续接接口时需要补首屏加载与分页切换反馈。
+- Loading state: 首屏与筛选切换需要显式展示 live list 加载反馈，避免把旧台账误认为已同步。
 - Empty state: 搜索或筛选无结果时维持 EmptyState 搜索空态。
-- Error state: 若 shared store 与静态台账口径不一致，应优先暴露列表映射异常，不能静默吞掉。
+- Error state: Elder Service / Admin BFF 返回失败时显式暴露列表读取错误，不再静默回退到静态老人台账。
 - Mobile impact: KPI、治理闭环卡和筛选区继续保持纵向阅读顺序；表格在较窄宽度下仍需确认横向滚动和操作列可达性。
 
 ## Health Signals
 
-- Healthy signal: 首屏先完成“判断当前台账压力 -> 进入审核、导入或详情处理”的闭环；搜索、护理等级筛选、状态筛选和分页保持稳定组合。
-- Failure signal: 页面重新堆入训练性说明卡，或 shared store 新建/导入记录未出现在列表、人脸状态与人脸录入页不一致。
+- Healthy signal: 首屏先完成“判断当前台账压力 -> 进入审核、导入或详情处理”的闭环；搜索、护理等级筛选、状态筛选和分页全部建立在 Elder Service 实时返回之上。
+- Failure signal: 列表总数、分页结果和详情入口对应不上同一批 elderId，或页面重新落回静态台账数据。
 - Verification proxy: lint 通过；行为变更时加 build 与手工列表流回归。
 
 ## Verification
 
 - Minimum gate: npm run lint
 - Stronger gate for behavior changes: npm run lint and npm run build
-- Manual path: 验证新增老人入口、资料导入入口、入住审核入口、搜索筛选分页、详情进入、人脸状态展示、人脸快捷动作，以及新建或导入对象回流列表
+- Manual path: 验证新增老人入口、资料导入入口、入住审核入口、搜索筛选分页、详情进入，以及新建对象写入 Elder Service 后回流列表
 
 ## Rollback
 
 - Revert this route delivery note and any future elderly list route changes together.
-- If later list behavior regresses, fallback is the previous static台账列表实现，并移除对 shared workflow store 的订阅。
+- If later list behavior regresses, fallback is the previous static 台账列表实现，并回退 Admin BFF / Elder Service 的列表接入。

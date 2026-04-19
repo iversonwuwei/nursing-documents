@@ -4,7 +4,7 @@
 
 - Entry route: src/app/rooms/page.tsx
 - Affected users: 前台入住协调、床位运营、护理主管与机构协同用户
-- Rollout stage: 第十九批物资、房间与员工页面主区收口
+- Rollout stage: rooms live vertical slice
 
 ## User Impact
 
@@ -15,21 +15,21 @@
 
 ## Data Source
 
-- Route type: client page with local search and pagination state + shared workflow subscription
-- Primary sources: master-data-workflow merged rooms、机构列表和 AI room helpers
+- Route type: client page with local search and pagination state
+- Primary sources: Next `/api/rooms` -> Admin BFF `/api/admin/rooms` -> Rooms service persisted room records；入住对象由 Admin BFF 聚合真实 elder list
 - Downstream links: room new page, room detail and AI assistant context links
 
 ## UI States
 
-- Loading state: 当前为本地同步 mock；后续接实时床位接口时需补搜索与分页反馈。
+- Loading state: 从 live rooms API 加载房间主档与入住摘要。
 - Empty state: 搜索无结果时应保持搜索空态。
-- Error state: 房间入住率、机构数量与 AI 分配建议口径不一致时需局部暴露。
+- Error state: 下游 rooms service 或 elder aggregation 失败时显式展示 live error，不回退本地 room workflow。
 - Mobile impact: 房间表格和入住率展示在窄屏下需验证滚动顺序、信息轨堆叠和查看 CTA 可达性。
 
 ## Health Signals
 
 - Healthy signal: 房间统计、待启用状态、房间列表和查看详情入口围绕同一房间数据集保持一致。
-- Failure signal: 待启用房间被直接计入可入住、入住率和房间状态错位，或 AI 摘要越过“建议而非自动排房”的边界。
+- Failure signal: 待启用房间被直接计入可入住、入住率和房间状态错位，或页面重新读取本地 room workflow / mock AI。
 - Verification proxy: lint 通过；行为改动时加 build 与房间管理人工回归。
 
 ## Verification
@@ -41,4 +41,4 @@
 ## Rollback
 
 - Revert this delivery note and any future rooms route changes together.
-- If regressions appear, fallback is the previous local room list, occupancy visualization, and AI summary composition.
+- If regressions appear, rollback the live rooms routes together; do not keep partial dual-read behavior.

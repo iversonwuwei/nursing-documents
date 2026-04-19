@@ -4,7 +4,7 @@
 
 - Entry route: src/app/activities/new/page.tsx
 - Affected users: 活动运营、前台协同、护理主管
-- Rollout stage: 第十五批运营新建闭环治理说明
+- Rollout stage: activities family live read-write 收口中的创建入口
 
 ## User Impact
 
@@ -14,15 +14,15 @@
 
 ## Data Source
 
-- Route type: client page with local form state
-- Primary data sink: shared operations workflow mock store with localStorage persistence
+- Route type: client form page
+- Primary data sink: Admin activities create API
 - Downstream link: activities list route with selected and entry query params
 
 ## UI States
 
 - Loading state: 提交按钮进入 loading，避免重复提交同一条活动初稿。
 - Empty state: 不适用；表单默认以最小可提交字段集初始化。
-- Error state: 必填项、时长和容量校验失败时在表单顶部显式提示。
+- Error state: 必填项、时长和容量校验失败时在表单顶部显式提示；服务端写入失败时保留显式错误信息，不回退本地草稿写入。
 - Mobile impact: 表单网格、闭环说明卡和提交 CTA 在窄屏下需保持单列可读。
 
 ## Health Signals
@@ -39,5 +39,5 @@
 
 ## Rollback
 
-- Revert this delivery note together with activities new route and shared operations workflow changes.
-- If regressions appear, fallback is to remove activities new route and restore the previous static list-only behavior.
+- Revert this delivery note together with activities create route、Next proxy、Admin BFF 和 operations create endpoint。
+- If regressions appear, fallback is to restore the previous local draft creation path.

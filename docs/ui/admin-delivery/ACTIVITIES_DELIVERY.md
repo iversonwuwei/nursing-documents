@@ -4,7 +4,7 @@
 
 - Entry route: src/app/activities/page.tsx
 - Affected users: 活动运营、前台协同、护理主管
-- Rollout stage: 第十六批运营工作台主区收口与帮助页后置
+- Rollout stage: activities family live read-write 收口，切换到 Admin Web -> Next proxy -> Admin BFF -> Operations Service
 
 ## User Impact
 
@@ -15,22 +15,22 @@
 
 ## Data Source
 
-- Route type: client page with local search state and shared workflow subscription
-- Primary data: shared operations workflow mock store with localStorage persistence
-- Upstream link: activities new route
+- Route type: client page with local search state and live API read model
+- Primary data: Admin activities API list and publish action
+- Upstream link: activities new route through the same live operations chain
 - Downstream links: activity detail routes and help route
 
 ## UI States
 
-- Loading state: 当前为本地同步 workflow store，后续接活动排期接口时需补列表加载与发布反馈。
-- Empty state: 搜索无结果时保持 EmptyState 搜索空态。
-- Error state: 列表、今日统计、优先队列、待发布提示卡和详情入口若不一致，需要局部暴露而非静默。
+- Loading state: 首屏等待活动列表返回时显示 loading，不再默认回退本地活动草稿。
+- Empty state: 搜索无结果时保持 EmptyState 搜索空态；live 返回空集合时显示真实空态而不是 demo 样例。
+- Error state: 列表、今日统计、优先队列和发布动作失败时显式暴露 Live Unavailable 或动作失败信息，不静默回退本地 workflow。
 - Mobile impact: 活动卡片、待发布提示卡、右轨路径卡和帮助入口并存时，需验证窄屏下日期、地点和 CTA 不会互相挤压。
 
 ## Health Signals
 
-- Healthy signal: 新建活动能回流到列表，待发布状态、优先队列、今日统计、帮助页入口和详情入口围绕同一条数据链路保持一致。
-- Failure signal: 新建活动未出现在列表，发布动作未同步更新状态与详情，或右轨说明与主工作区状态脱节。
+- Healthy signal: 新建活动能回流到列表，待发布状态、优先队列、今日统计、帮助页入口和详情入口围绕同一条 live 数据链路保持一致。
+- Failure signal: 新建活动未出现在列表，发布动作未同步更新状态与详情，页面退回本地草稿口径，或右轨说明与主工作区状态脱节。
 - Verification proxy: docs build、lint、build 通过；人工验证新建活动 -> 列表待发布 -> 发布 -> 详情查看 -> 帮助页回跳闭环。
 
 ## Verification
@@ -41,5 +41,5 @@
 
 ## Rollback
 
-- Revert this delivery note together with activities list route, help route and shared operations workflow 接入。
-- If regressions appear, fallback is the previous static activities list and detail mock implementation.
+- Revert this delivery note together with activities list route、Next proxy、Admin BFF 和 operations activities endpoints。
+- If regressions appear, fallback is the previous local operations-workflow implementation.

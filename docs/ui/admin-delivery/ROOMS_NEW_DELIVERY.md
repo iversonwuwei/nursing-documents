@@ -4,7 +4,7 @@
 
 - Entry route: src/app/rooms/new/page.tsx
 - Affected users: 前台入住协调、床位运营、保洁主管与机构协同用户
-- Rollout stage: 第十九批物资、房间与员工页面主区收口
+- Rollout stage: rooms live vertical slice
 
 ## User Impact
 
@@ -17,20 +17,20 @@
 ## Data Source
 
 - Route type: client form page
-- Primary source: master-data-workflow shared store
-- Downstream dependency: addRoomDraft 写入 shared store，并跳转 `/rooms?selected=...&entry=rooms-new`
+- Primary source: Next `/api/rooms` -> Admin BFF `/api/admin/rooms`
+- Downstream dependency: create live room record，并跳转 `/rooms?selected=...&entry=rooms-new`
 
 ## UI States
 
 - Loading state: 提交按钮展示保存中。
-- Empty state: 当前依赖默认空表单；后续接真实 API 时补字段级提示。
+- Empty state: 默认空表单；若没有已启用机构，应提示先完成机构建档与启用。
 - Error state: 编号、名称、机构、楼层或床位数非法时，显式展示表单级错误。
 - Mobile impact: 单页表单卡片布局，需保证机构选择和提交区在窄屏可达。
 
 ## Health Signals
 
 - Healthy signal: 新增房间提交后进入待启用闭环，且房间列表和详情页都能命中同一对象。
-- Failure signal: 房间编号冲突未拦截、提交后对象丢失，或待启用房间被直接计入可入住资源池。
+- Failure signal: 房间编号冲突未拦截、提交后对象丢失，或新建页未命中真实机构选择器仍允许自由文本机构提交。
 - Verification proxy: lint 通过；行为改动时加 build 与房间新建人工回归。
 
 ## Verification
@@ -42,4 +42,4 @@
 ## Rollback
 
 - Revert this delivery note and any future rooms new route changes together.
-- If regressions appear, fallback is移除新建页入口并回退到只读房间列表。
+- If regressions appear, rollback the live new-room flow together; do not keep partial live create with mock list hydration.

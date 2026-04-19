@@ -8,28 +8,29 @@
 
 ## User Impact
 
-- 长者健康档案页当前承接健康记录汇总、AI 巡诊建议、用药提醒和健康指标表。
-- 主区优先保留档案列表、指标汇总和用药执行信息，AI 巡诊建议与页面说明后置到信息轨。
-- 保持健康档案页作为长者健康总览入口，不改变详情入口与 AI 建议结构。
+- 长者健康档案页改为直接读取 Health Service 真实健康摘要，而不是本地 HEALTH_RECORDS 与硬编码用药数据。
+- 主区优先保留档案列表、指标汇总和风险摘要；右轨只展示基于实时档案生成的辅助建议，不再依赖本地示例对象。
+- 保持健康档案页作为长者健康总览入口，不改变详情入口，但空态与错误态都要显式区分真实接口不可用。
 
 ## Data Source
 
-- Route type: client archive page with local search state
-- Primary sources: HEALTH_RECORDS, MEDICATIONS, admin AI helpers
-- Downstream links: elderly detail route links derived from health records
+- Route type: client archive page with live health archive query and local search state
+- Primary sources: Admin BFF `/api/admin/health/archives`，由 Health Service 健康摘要与 Elder Service 主档合并返回
+- Downstream links: elderly detail route links derived from live elderId
+- Dependent systems: Admin Next route proxy, Admin BFF, Health Service, Elder Service, 本地 PostgreSQL seed 数据
 
 ## UI States
 
-- Loading state: 当前搜索和数据展示为本地即时响应；后续接真实档案服务时需补页面级加载反馈。
-- Empty state: 搜索后无匹配档案或无用药项时，应显式提示无结果，而不是只保留空表格或空卡片。
-- Error state: 健康指标、AI 建议和用药提醒口径不一致时应显式暴露，而不是继续渲染成功态。
+- Loading state: 首屏和刷新动作必须显式展示 live health archive 加载反馈。
+- Empty state: 搜索后无匹配档案或健康库尚未写入样本时，应显式提示无结果，而不是只保留空表格或空卡片。
+- Error state: Health Service / Admin BFF 返回失败时显式暴露错误，不再继续渲染本地健康样本成功态。
 - Mobile impact: 五列统计卡、双栏 AI 区和多列表格在窄屏下需要验证横向滚动与阅读顺序。
 - Help state: 通过后置信息轨查看巡诊边界和帮助入口，不再把长说明重新堆回主区。
 
 ## Health Signals
 
-- Healthy signal: 健康档案、用药提醒、右轨 AI 巡诊建议和帮助入口在同一对象和时间口径下保持一致。
-- Failure signal: 搜索结果、统计卡与档案表不一致，或 AI 建议与健康档案对象错位。
+- Healthy signal: 健康档案列表、统计卡和右轨辅助建议都基于同一批 live health archive 返回，且 elderId 可稳定跳转到详情页。
+- Failure signal: 搜索结果、统计卡与档案表不一致，或页面仍出现硬编码用药对象与本地健康样本。
 - Verification proxy: lint 通过；行为改动时加 build 与健康档案流人工回归。
 
 ## Verification
@@ -41,4 +42,4 @@
 ## Rollback
 
 - Revert this delivery note and any future elderly health route changes together.
-- If regressions appear, fallback is the current local health archive composition.
+- If regressions appear, fallback is the previous local health archive composition，并移除 `/api/admin/health/archives` 读取链路。

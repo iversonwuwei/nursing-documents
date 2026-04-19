@@ -142,7 +142,7 @@
   - 把“服务计划”话术统一改成“认定结论与服务建议”
 - `src/app/financial/page.tsx`
   - 统一改成评定服务结算与质控
-  - 让结算页可见规则版本和模板上下文
+  - 当前阶段先收敛为 Billing live read-only 页面，移除前端 demo 结算单 fallback
 - `src/components/layout/TopNavbar.tsx`
   - 导航统一改成评定机构模型
 - `src/app/elderly/import/page.tsx`、`src/app/elderly/new/page.tsx`
@@ -175,6 +175,6 @@
 
 ## Residual Risk
 
-- 当前仍是前端 demo 配置和演示数据，尚未接真实规则引擎、BFF 和正式结算接口。
+- 上游规则、模板和部分长护险 workflow 仍有前端 demo 配置，但 `/financial` 当前阶段会先收敛为真实 Billing read model，不再继续混用前端 demo 结算单。
 - 任务中心和排期页的下游任务语义还未完全切到评定任务模型，本轮先完成上游纠偏。
 - `assessment-workflow.ts` 仍保留部分历史内部命名以兼容现有 store；后续可继续去掉 admission 兼容别名。

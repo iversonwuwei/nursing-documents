@@ -38,3 +38,13 @@
 - 文档目录结构清晰，团队可以按主题持续沉淀。
 - 关键模块均有对应文档入口。
 - 发布、回滚、观察指标有明确记录位置。
+- admin live 主数据切片在进入运行态联调前，至少要补齐一层后端自动化验证，覆盖校验规则、BFF 聚合规则或持久化约束中的关键风险点。
+
+## 当前验证补强
+
+- scope: 本轮不新增用户功能，只为已落地的 admin live 主数据切片补后端自动化门禁，重点覆盖机构、房间、员工与个案评定相关规则。
+- affected users: 后端研发、管理端联调人员、测试。
+- changed behavior: 无用户可见行为变化；仅提升回归时对校验漂移、聚合口径漂移和持久化模型漂移的发现能力。
+- dependent systems: nursing-backend-services 的 Admin BFF、Organization、Rooms、Staffing、Elder 服务及现有 architecture test 项目。
+- verification: nursing-documents `npm run docs:build`；nursing-backend-services 定向 `dotnet test`。
+- rollback: 回退新增测试与测试支撑 helper，不改动既有接口契约与页面入口。

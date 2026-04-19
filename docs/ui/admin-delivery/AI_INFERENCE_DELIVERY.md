@@ -8,28 +8,28 @@
 
 ## User Impact
 
-- AI 推理详情页承担模型状态、健康解释样本、入住评估记录和治理跳转的统一查看入口。
+- AI 推理详情页承担真实模型状态、真实健康解释样本、审计记录和治理跳转的统一查看入口。
 - 主工作区优先保留当前推理追踪、健康解释样本与入住评估记录；模型说明、治理边界与帮助入口后置。
-- 当前交付单元不修改 tracking context、样本列表或治理跳转行为，只调整信息层级。
+- 当前交付单元移除 admission workflow 和本地 AI 样本依赖；缺少真实读模型的部分改为审计与 unavailable 表达，不再保留假记录。
 - 保持“只读推理结果，不直接改写业务状态”的边界。
 
 ## Data Source
 
 - Route type: client page with query-param context and useSyncExternalStore snapshots
-- Primary sources: admin AI mock datasets, admission workflow snapshot, AI context helpers
+- Primary sources: `/api/ai/models/status`, `/api/ai/health-risk`, `/api/ai/audit-logs`, `/api/health/archives`, AI context helpers
 - Downstream link: AI rules route with appended tracking context
 
 ## UI States
 
-- Loading state: 当前大部分为本地同步 mock；若后续接真实推理服务，需补模型状态、样本和表格的加载反馈。
+- Loading state: 首屏拉取真实模型状态、健康样本和审计日志时需显示可见反馈。
 - Empty state: tracking context、context cards 或 related logs 为空时，应保持局部空缺而不破坏整体推理视图；帮助入口仍需可达。
-- Error state: context 与对象级样本、日志或推荐记录映射错位时需显式暴露。
+- Error state: context 与对象级样本、日志映射错位，或真实推理接口失败时需显式暴露，不回退 mock 样本。
 - Mobile impact: 上下文卡、模型状态卡和表格信息量大，后续改动需验证窄屏下主区优先顺序与 CTA 可达性。
 
 ## Health Signals
 
-- Healthy signal: tracking context、健康解释样本、入住评估记录与规则治理跳转保持一致，后置区不抢占主区结果视线。
-- Failure signal: 来源上下文丢失、对象样本错链，或推理页越过人工确认边界。
+- Healthy signal: tracking context、真实健康解释样本、审计记录与规则治理跳转保持一致，后置区不抢占主区结果视线。
+- Failure signal: 来源上下文丢失、对象样本错链、接口失败后回退 mock，或推理页越过人工确认边界。
 - Verification proxy: lint 通过；行为改动时加 build 与 AI 推理上下文人工回归。
 
 ## Verification

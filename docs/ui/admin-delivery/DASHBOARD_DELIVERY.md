@@ -9,26 +9,26 @@
 ## User Impact
 
 - Dashboard 作为管理端着陆页，需要把当天总览、风险和待处理事项压缩成可快速判断的入口。
-- 当前交付单元先固化说明和验证标准，不修改页面行为。
-- 保持现有首页入口和卡片布局不变。
+- 当前交付单元要求首页只消费 Admin BFF 聚合快照，不再回填本地任务、健康、设备或 admission 假计数。
+- 保持现有首页入口和卡片布局主结构不变，但缺少真实口径时优先减少内容而不是继续显示 mock 数字。
 
 ## Data Source
 
 - Route type: Next.js client route re-exporting root landing page
-- Upstream dependencies: 当前沿用现有 mock 或本地数据聚合
+- Upstream dependencies: `/api/dashboard/overview` Admin BFF 聚合快照
 - Adjacent routes: src/app/page.tsx, src/app/alerts/page.tsx, src/app/elderly/page.tsx
 
 ## UI States
 
-- Loading state: 仪表盘卡片应能表达数据尚未就绪的占位或缺省策略。
+- Loading state: 首页卡片应能表达聚合尚未就绪的占位或缺省策略。
 - Empty state: 当日无新增风险或运营动作时，需要有明确“无待办”表达，而不是纯空白。
-- Error state: 卡片级错误不应让整页失效，应保留局部降级能力。
+- Error state: 聚合失败时应保留入口和错误状态，但不再回填本地静态快照。
 - Mobile impact: 卡片密度较高，后续改动需要确认窄屏换行和滚动顺序。
 
 ## Health Signals
 
-- Healthy signal: 管理用户可以在首屏看到关键 KPI、待处理项和跳转入口。
-- Failure signal: 着陆页信息过载、关键风险不可见或卡片缺少可回归的稳定状态。
+- Healthy signal: 管理用户可以在首屏看到来自 Admin BFF 聚合的关键 KPI、待处理项和跳转入口。
+- Failure signal: 着陆页信息过载、关键风险不可见、聚合失败后回退假数据，或卡片缺少可回归的稳定状态。
 - Verification proxy: lint 通过，后续行为变更时补 build 和可复现 UI 流。
 
 ## Verification
