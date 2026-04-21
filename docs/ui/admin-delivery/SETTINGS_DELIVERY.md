@@ -8,37 +8,40 @@
 
 ## User Impact
 
-- 设置页当前以标准模块页承接系统配置总览、配置入口和管理导航。
-- 设置根页继续保持标准模块页骨架；静态文本与下拉选项子页按同一批次收口为“主区执行 + 信息轨说明 + 显式帮助入口”模式。
-- 配置主区只保留筛选、列表、分组切换与查看动作，把解释性口径、变更边界和帮助入口后置。
-- 保持当前 StandardModulePage 渲染路径和 settings 模块配置不变。
+- 系统配置首页不再以 StandardModulePage 静态演示数据呈现，而是聚合已真实对接的配置子页入口（静态文本、下拉选项、操作日志、角色权限），以真实计数作为 KPI。
+- 管理员进入 `/settings` 就能看到各配置域当前的真实对接状态和总量已接入，不再从开发阶段的例子和水位接口观感。
+- 本次交付不引入系统配置的新写操作，所有子页正常行为保持不变。
 
 ## Data Source
 
-- Route type: standard module wrapper
-- Primary source: settingsPage standard config
-- Downstream dependency: shared StandardModulePage component behavior
+- Route type: live settings overview page
+- Primary sources:
+  - `fetchStaticTexts({ pageSize: 1 })` / `fetchStaticTextNamespaces()` -> `/api/content/static-texts*` -> Admin BFF -> Config Service
+  - `fetchOptionGroups({ pageSize: 1 })` -> `/api/content/option-groups*` -> Admin BFF -> Config Service
+  - `fetchAuditLogs({ pageSize: 1 })` -> `/api/content/audit-logs*` -> Admin BFF -> Config Service
+  - `fetchAdminRoles()` -> `/api/admin-identity/roles` -> Admin BFF `/api/admin/roles` -> Identity Service `/api/identity/roles`
+- Removed source: `settingsPage` 静态模块配置不再被该路由消费。
 
 ## UI States
 
-- Loading state: 标准模块页后续若接真实系统配置数据，需统一遵循标准页加载反馈。
-- Empty state: 设置项为空时应保持标准页级空态一致性；静态文本和下拉选项筛选无结果时保持搜索空态。
-- Error state: 配置或模块定义异常时应保留标准页框架并显式失败；静态文本与选项查询失败时维持局部空列表，不把长说明重新压回主区。
-- Mobile impact: 由标准模块页统一承担窄屏布局责任。
+- Loading state: 初次进入或手动刷新时显式展示“加载中”，KPI 顶栏在数据就绪前不先展示假值。
+- Empty state: 某个配置域返回零记录时明确显示 `0 条`，并给出进入对应子页的入口。
+- Error state: 任一汇总请求失败时在该配置域卡片上显式标记异常，不会让整页回退到静态 mock。
+- Mobile impact: 配置卡片在窄屏下单列堆叠，重点数值和按钮可见。
 
 ## Health Signals
 
-- Healthy signal: settings route 稳定复用标准模块配置，并作为系统设置总入口保持一致。
-- Failure signal: 标准页配置漂移，导致设置总入口标题、列表或导航定义不匹配。
-- Verification proxy: lint 通过；行为改动时加 build 与标准模块页人工回归。
+- Healthy signal: `/settings` KPI 和每个子页自身总量口径一致；进入子页后看到的列表长度与首页 KPI 一致。
+- Failure signal: 出现静态数字（6/18/3 等演示值）或与子页冲突。
+- Verification proxy: `npm run lint` + `npm run build` + `docs:build`。
 
 ## Verification
 
-- Minimum gate: npm run lint
-- Stronger gate for behavior changes: npm run lint and npm run build
-- Manual path: 校验设置总入口、静态文本检索、选项分组切换、帮助入口与列表空态仍匹配系统配置治理场景
+- Minimum gate: `npm run lint`
+- Required gate for behavior change: `npm run lint` + `npm run build`
+- Manual path: 登录 admin -> `/settings`，确认三个配置域 KPI 不再为静态示例；停 Config / Identity 服务时首页仍可加载剩余配置域。
 
 ## Rollback
 
-- Revert this delivery note and any future settings route changes together.
-- If regressions appear, fallback is the previous StandardModulePage config wiring.
+- Revert this delivery note 和 `src/app/settings/page.tsx` 前端 commit 即可回到旧的 StandardModulePage 静态视图。
+- 新增的 Identity `/api/identity/roles`、Admin BFF `/api/admin/roles` 及 Next proxy 只提供只读列表，回退后保留无影响；若需一并回退，单独 revert Identity/BFF commit。

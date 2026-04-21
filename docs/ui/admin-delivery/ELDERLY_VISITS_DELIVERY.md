@@ -4,6 +4,60 @@
 
 - Entry route: src/app/elderly/visits/page.tsx
 - Affected users: 前台接待、家属沟通、探视审核用户
+- Rollout stage: visits 列表从 mock `care-service-workflow` 切换到真实 Visit Service 只读通道
+
+## Change Summary
+
+- 页面改为从 Admin BFF `/api/admin/visits` 直读 Visit Service 预约记录，不再订阅 `care-service-workflow` mock。
+- 默认展示当前租户下最近 100 条预约（按 `PlannedAtUtc` 倒序），状态取真实值（`Requested` / `Approved` / `Rejected` / `Completed` / `Cancelled`）。
+- 本期审批写入仍挂起（Visit Service 尚未暴露 approve/reject API），页面为只读；主区保留审核说明和入口占位，明确标记为“审批能力接入中”。
+- AI 探视建议与页面说明继续挂在右侧信息轨，保持主区聚焦真实预约列表。
+
+## Data Source
+
+- Route type: client component（派生 loading state，reloadToken 手动刷新）
+- Primary source: `fetchAdminVisits()` in `src/lib/services/admin-visit-services.ts`
+- Transport chain: 前端 `fetch('/api/admin-visits/visits')` → Next.js 代理 `src/app/api/admin-visits/[...segments]/route.ts` → Admin BFF `GET /api/admin/visits` → Visit Service `GET /api/visits/appointments`
+- Contract: `AdminVisitAppointmentResponse` in BuildingBlocks `VisitContracts.cs`，字段含 `visitId`, `elderId`, `tenantId`, `visitorName`, `relation`, `phone?`, `plannedAtUtc`, `visitType`, `status`, `notes?`.
+
+## UI States
+
+- Loading state: 初次加载与 reload 过程中显示加载态；采用 `records === null && error === null` 派生，不在 effect 内部 setState。
+- Empty state: 真实服务返回空数组时显式提示“暂无预约记录”，提供刷新按钮；不回落 mock。
+- Error state: fetch 失败时在主区渲染错误卡，提示“Visit Service 暂不可用”，保留重试按钮；统计 KPI 显示 0。
+- Mobile impact: 列表卡保持横向可滚动；审批说明占位在窄屏下以全宽堆叠。
+- Help state: 信息轨继续承载 AI 探视建议、审批边界说明和帮助入口，主区不被压缩。
+
+## Health Signals
+
+- Healthy signal: 接口返回真实预约数据，KPI（总数/今日/待审核/已完成）与表格一致；切换筛选保留真实口径。
+- Failure signal: Visit Service 不可达、BFF 代理 502、字段缺失导致统计为 0 但列表非空、错误态未显示。
+- Verification proxy: `npm run lint` + `npm run build`；后端 `dotnet build` 绿；手工访问 `/elderly/visits` 观察真实接口命中。
+
+## Verification
+
+- Minimum gate: `npm run lint`
+- Behavior gate: `npm run lint` + `npm run build`
+- Backend gate: `dotnet build` for BuildingBlocks → Visit Service → Admin BFF
+- Manual path: `/elderly/visits` 可见真实预约；断开 Visit Service 观察错误态；点击刷新恢复。
+
+## Rollback
+
+- 还原文件：
+  - `src/app/elderly/visits/page.tsx`（回到 mock 订阅版本）
+  - `src/lib/services/admin-visit-services.ts`（删除）
+  - `src/app/api/admin-visits/[...segments]/route.ts`（删除）
+  - Admin BFF `Program.cs` 中新增的 `/api/admin/visits` endpoint（删除）
+  - Visit Service `Program.cs` 中新增的跨长者 `GET /api/visits/appointments` endpoint（删除）
+  - BuildingBlocks `VisitContracts.cs` 中新增的 `AdminVisitAppointmentResponse` 契约（删除）
+- 回滚后前端退回 mock `care-service-workflow` 订阅；写入路径仍由现有 `POST /api/visits/appointments` 承担。
+
+# Elderly Visits Delivery Unit
+
+## Scope
+
+- Entry route: src/app/elderly/visits/page.tsx
+- Affected users: 前台接待、家属沟通、探视审核用户
 - Rollout stage: 探视审核页主区收口与帮助后置批次
 
 ## User Impact

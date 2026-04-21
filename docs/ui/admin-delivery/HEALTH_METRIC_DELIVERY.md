@@ -3,41 +3,48 @@
 ## Scope
 
 - Entry route: src/app/health/[metric]/page.tsx
-- Affected users: 健康专题查看、运营配置、护理分析用户
-- Rollout stage: 第十二批健康域路由治理说明
+- Affected users: 健康专题查看、护理分析、监控值班用户
+- Rollout stage: 第二十批健康专题页切换到真实 Vital Observation 聚合数据
 
-## User Impact
+## Change Summary
 
-- 健康指标子路由当前根据 metric 参数映射标准模块页配置，用于承接不同健康专题视图。
-- 当前交付单元先固定参数路由职责、验证门禁和 notFound 边界，不修改标准模块配置。
-- 保持合法 metric 命中标准模块页，非法 metric 返回 notFound 的当前行为不变。
+- `/health/[metric]` 不再渲染 `standard-pages.tsx` 中的静态专题配置，而是切到真实 `fetchHealthMonitoringData()` 结果。
+- 支持 `bp`、`hr`、`sleep` 三类专题：
+- `bp` 基于真实最近一次血压与近 7 日高压趋势排序重点对象。
+- `hr` 基于真实最近一次心率与近 7 日平均心率趋势排序重点对象。
+- `sleep` 当前无独立睡眠服务，显式使用夜间体征样本作为代理视角，并在页面中声明边界。
+- 非法 metric 仍然通过 `notFound()` 显式失败，不做静默回退。
 
 ## Data Source
 
-- Route type: server route with async params and standard config lookup
-- Primary source: healthMetricPages config map
-- Downstream dependency: shared StandardModulePage component and next/navigation notFound
+- Route type: server wrapper + client metric page
+- Primary source: `fetchHealthMonitoringData()` in `src/lib/services/admin-health-services.ts`
+- Transport chain: `fetch('/api/admin-vitals/vitals?take=500')` → `src/app/api/admin-vitals/[...segments]/route.ts` → Admin BFF `GET /api/admin/vitals` → Health Service `GET /api/health/vitals`
+- Derived behavior:
+- `bp`/`hr` 直接从最近一次 observation 与 7 日聚合点派生。
+- `sleep` 从 22:00-06:00 observation 子集派生夜间代理指标，不宣称独立睡眠医疗数据。
 
 ## UI States
 
-- Loading state: 当前标准模块页按配置直接渲染；后续若 metric 页面接真实数据，应沿用标准页加载反馈。
-- Empty state: 配置存在但无模块内容时应保持标准页级空态一致性。
-- Error state: 未命中 metric 时通过 notFound 显式失败；命中后若配置漂移也应显式暴露。
-- Mobile impact: 由标准模块页统一承担窄屏布局责任，但不同 metric 仍需验证模块密度。
+- Loading state: `data === null && error === null` 时显示专题级占位。
+- Empty state: 实时 observation 为空时显示专题空态，而不是静态样例表。
+- Error state: Health Service 不可达显示错误卡；非法 metric 继续 `notFound()`。
+- Mobile impact: KPI、趋势图、重点对象表在窄屏下堆叠；表格保持横向滚动。
 
 ## Health Signals
 
-- Healthy signal: 合法 metric 稳定映射到对应标准模块页，非法 metric 稳定返回 notFound。
-- Failure signal: 参数映射错位、配置缺失静默回退，或不同 metric 渲染到错误专题页。
-- Verification proxy: lint 通过；行为改动时加 build 与健康 metric 路由人工回归。
+- Healthy signal: 三个合法 metric 页面都来自同一真实 observation 数据源，重点对象排序与总览口径一致。
+- Failure signal: metric 页面仍显示静态样例、排序与总览不一致、sleep 页面未声明代理边界。
+- Verification proxy: docs build、lint、build 通过；手测 `bp`、`hr`、`sleep` 与非法 metric。
 
 ## Verification
 
 - Minimum gate: npm run lint
 - Stronger gate for behavior changes: npm run lint and npm run build
-- Manual path: 验证一个合法 metric 可正常渲染标准模块页，非法 metric 返回 notFound
+- Docs gate: npm run docs:build
+- Manual path: 验证 `/health/bp`、`/health/hr`、`/health/sleep` 可正常渲染实时专题，非法 metric 返回 notFound
 
 ## Rollback
 
-- Revert this delivery note and any future health metric route changes together.
-- If regressions appear, fallback is the current config lookup and notFound boundary.
+- Revert `src/app/health/[metric]/page.tsx`、`src/app/health/[metric]/health-metric-client.tsx` 与本 delivery note。
+- 若真实 observation 链路不可用，页面会走错误态；回滚后可恢复原静态专题配置。
