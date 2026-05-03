@@ -119,6 +119,16 @@ xl:  1280px 桌面标准
 
 ---
 
+## 3.1 登录页
+
+- 登录页使用独立全屏画布，不挂载业务页顶部导航。
+- `.login-root` 必须提供 `min-height: 100dvh`、水平/垂直居中和移动端安全边距，保证表单卡片在桌面与手机视口都位于页面中心。
+- `.login-card` 是唯一视觉容器，宽度上限约 420px；Logo、标题、账号输入、租户选择、密码输入、提交按钮和测试账号提示都必须位于该容器内。
+- 登录页组件类名需要与全局样式保持一一对应：`login-root`、`login-card`、`login-logo`、`login-logo-icon`、`login-logo-text`、`login-title`、`login-subtitle`、`login-form`、`login-field`、`login-label`、`login-input`、`login-submit`、`login-hint`。
+- 错误态使用与表单同宽的块级提示，不改变卡片居中位置；loading 态只改变按钮文案，不改变按钮尺寸。
+
+---
+
 ## 4. 组件规范
 
 ### StatCard（统计卡片）
